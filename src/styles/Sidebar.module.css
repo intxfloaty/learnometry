@@ -1,0 +1,17 @@
+.sidebar {
+  z-index: 1000;
+  transition: all 0.3s;
+}
+
+.logoContainer {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  max-width: 100%;
+  object-fit: contain;
+}
