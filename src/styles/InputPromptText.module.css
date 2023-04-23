@@ -1,0 +1,81 @@
+.container {
+  position: fixed;
+  bottom: 0;
+  left: 260px;
+  width: calc(100% - 260px);
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+
+.inputField {
+  width: 80%;
+  padding: 13px 15px;
+  font-size: 16px;
+  color: var(--color-text);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.inputField:focus {
+  border-color: black;
+  box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);
+}
+
+.learnButton {
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.learnButton:hover {
+  background-color: #1c86ee;
+}
+
+.learnButton:active {
+  background-color: #187bcd;
+  transform: scale(0.95);
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .container {
+    left: 0;
+    width: 100%;
+  }
+
+  .inputField {
+    font-size: 16px;
+  }
+
+  .learnButton {
+    padding: 8px 16px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    left: 0;
+    width: 100%;
+  }
+
+  .inputField {
+    font-size: 18px;
+  }
+
+  .learnButton {
+    padding: 10px 20px;
+  }
+}

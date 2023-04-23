@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import ThemeToggleButton from './ThemeToggleButton';
 import styles from '../styles/Sidebar.module.css'
 import { ListItemButton, ListItemText, IconButton, Drawer, useMediaQuery, AppBar, Toolbar, Hidden } from '@mui/material';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -11,7 +12,7 @@ const Sidebar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const drawerWidth = 260;
 
-  const isMobile = useMediaQuery('(max-width:700px)'); // Adjust the breakpoint value as needed
+  const isMobile = useMediaQuery('(max-width:1024px)'); // Adjust the breakpoint value as needed
 
   const toggleDrawer = (open) => (event) => {
     setDrawerOpen(open);
@@ -48,12 +49,16 @@ const Sidebar = () => {
         </IconButton>
         <ListItemText primary="Log Out" />
       </ListItemButton>
+
+      <div className={styles.themeToggleButtonContainer}>
+        <ThemeToggleButton />
+      </div>
     </div>
   );
 
   return (
     <>
-      <Hidden mdUp>
+      <Hidden lgUp>
         <AppBar position="fixed" color="transparent" elevation={0}>
           <Toolbar>
             <IconButton

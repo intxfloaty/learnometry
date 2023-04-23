@@ -1,6 +1,6 @@
-
-
 .logoContainer {
+  background-color: var(--color-bg);
+  color: var(--color-text);
   height: 100px;
   width: 100%;
   display: flex;
@@ -11,4 +11,11 @@
 .logo {
   max-width: 100%;
   object-fit: contain;
+}
+
+.themeToggleButtonContainer {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
