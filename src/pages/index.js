@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
   return (
     <>
-      <main className={`${styles.main} ${inter.className}`}>
+      <main className={styles.main} >
         <Sidebar />
         <InputPromptText />
       </main>
