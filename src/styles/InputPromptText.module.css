@@ -1,7 +1,14 @@
+.parent {
+  position: relative;
+  height: 100%;
+  width: calc(100% - 260px);
+}
+
 .container {
   position: fixed;
   bottom: 0;
   left: 260px;
+  background-color: #fff;
   width: calc(100% - 260px);
   padding: 20px;
   display: flex;

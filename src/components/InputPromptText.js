@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styles from '../styles/InputPromptText.module.css';
 import SendIcon from '@mui/icons-material/Send';
+import ResponseArea from './ResponseArea';
 
 
 const InputPromptText = () => {
   const [inputText, setInputText] = useState('');
+  const [responses, setResponses] = useState([]);
 
   const handleInputChange = (event) => {
     setInputText(event.target.value);
@@ -20,6 +22,7 @@ const InputPromptText = () => {
         body: JSON.stringify({ topic: inputText }),
       });
       const data = await res.json();
+      setResponses((prevResponses) => [data, ...prevResponses]);
       console.log(data);
     } catch (error) {
       console.error("Error calling OpenAI API:", error);
@@ -31,18 +34,21 @@ const InputPromptText = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <input
-        className={styles.inputField}
-        type="text"
-        placeholder="What do you want to learn?"
-        value={inputText}
-        onChange={handleInputChange}
-      />
-      <button className={styles.learnButton} onClick={handleLearnButtonClick}>
-        <SendIcon style={{ color: 'white' }} />
-      </button>
-    </div>
+    <>
+      <ResponseArea responses={responses} />
+      <div className={styles.container}>
+        <input
+          className={styles.inputField}
+          type="text"
+          placeholder="What do you want to learn?"
+          value={inputText}
+          onChange={handleInputChange}
+        />
+        <button className={styles.learnButton} onClick={handleLearnButtonClick}>
+          <SendIcon style={{ color: 'white' }} />
+        </button>
+      </div>
+    </>
   );
 };
 
