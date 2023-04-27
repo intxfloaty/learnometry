@@ -35,16 +35,17 @@ const InputPromptText = () => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.responseArea}>
-        {responses.reverse().map((response, index) => (
-          <div key={index} className={styles.response}>
-            <div className={styles.responseText}>{response.text}</div>
-            <div className={styles.promptSuggestions}>
-              This is a prompt suggestion
+      {responses.length != 0 &&
+        <div className={styles.responseArea}>
+          {responses.reverse().map((response, index) => (
+            <div key={index} className={styles.response}>
+              <div className={styles.responseText}>{response.text}</div>
+              <div className={styles.promptSuggestions}>
+                This is a prompt suggestion
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>}
       <div className={styles.container}>
         <input
           className={styles.inputField}
