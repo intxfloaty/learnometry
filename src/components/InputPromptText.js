@@ -8,6 +8,8 @@ const InputPromptText = () => {
   const [inputText, setInputText] = useState('');
   const [responses, setResponses] = useState([]);
 
+  console.log(responses, 'responses');
+
   const handleInputChange = (event) => {
     setInputText(event.target.value);
   };
@@ -21,8 +23,10 @@ const InputPromptText = () => {
         },
         body: JSON.stringify({ topic: inputText }),
       });
-      const data = await res.json();
-      setResponses((prevResponses) => [data, ...prevResponses]);
+      const data = await res.json()
+      const responseData = { title: inputText, text: data.text }
+
+      setResponses((prevResponses) => [responseData, ...prevResponses]);
       console.log(data);
     } catch (error) {
       console.error("Error calling OpenAI API:", error);
@@ -39,6 +43,7 @@ const InputPromptText = () => {
         <div className={styles.responseArea}>
           {responses.reverse().map((response, index) => (
             <div key={index} className={styles.response}>
+              <div className={styles.responseTitle}>{response.title}</div>
               <div className={styles.responseText}>{response.text}</div>
               <div className={styles.promptSuggestions}>
                 This is a prompt suggestion
