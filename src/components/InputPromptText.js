@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../styles/InputPromptText.module.css';
 import SendIcon from '@mui/icons-material/Send';
-import ResponseArea from './ResponseArea';
 
 
 const InputPromptText = () => {
