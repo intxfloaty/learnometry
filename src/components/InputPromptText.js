@@ -38,7 +38,8 @@ const InputPromptText = () => {
   };
 
   function handleClick(prompt) {
-    fetchResponse(prompt)
+    const cleanedPrompt = prompt.replace(/^\d+\.\s*/, '');
+    fetchResponse(cleanedPrompt);
   }
 
   return (
@@ -47,7 +48,7 @@ const InputPromptText = () => {
         <div className={styles.responseArea}>
           {responses.reverse().map((response, index) => {
             const textLines = response.text.split(/\r?\n/);
-            const promptList = response.prompts.split(/\r?\n/);
+            const promptList = response.prompts.split(/\r?\n/).slice(3);
             return (
               <div key={index} className={styles.response}>
                 <div className={styles.responseTitle}>{response.title}</div>
