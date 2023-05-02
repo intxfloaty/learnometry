@@ -37,6 +37,29 @@
   text-transform: capitalize;
 }
 
+.promptSuggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.clickableItem {
+  display: block;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.clickableItem:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: blue;
+}
+
 .container {
   position: fixed;
   bottom: 0;

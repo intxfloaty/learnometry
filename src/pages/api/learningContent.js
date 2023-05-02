@@ -79,7 +79,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await overallChain.call({
-      topic: "artificial intelligence"
+      topic: topic,
     });
     res.status(200).json(response);
   } catch (error) {
