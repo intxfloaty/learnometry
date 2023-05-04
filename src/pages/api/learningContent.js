@@ -10,13 +10,13 @@ import { PromptTemplate } from "langchain/prompts";
 
 const chat = new ChatOpenAI({ temperature: 0 });
 
-
 const learningPrompt = ChatPromptTemplate.fromPromptMessages([
   SystemMessagePromptTemplate.fromTemplate(
     `You are a helpful tutor that helps students learn about any topic.
     Given a topic, it is your job to generate content for that topic.
     Topic: {topic}
-      content:`),
+      content:`
+  ),
   HumanMessagePromptTemplate.fromTemplate("{topic}"),
 ]);
 
@@ -27,33 +27,13 @@ const topicChain = new LLMChain({
   outputKey: "content",
 });
 
-
-// const topicLLM = new OpenAI({
-//   temperature: 0.5,
-// })
-
-// const topicTemplate = `You are a helpful tutor that helps students learn about any topic.
-// Given a topic, it is your job to generate a summary of the topic.
-// Topic: {topic}
-//   Summary:`
-
-// const topicPromptTemplate = new PromptTemplate({
-//   template: topicTemplate,
-//   inputVariables: ["topic"],
-// })
-
-// const topicChain = new LLMChain({
-//   llm: topicLLM,
-//   prompt: topicPromptTemplate,
-//   outputKey: "summary",
-// })
-
 const questionLLM = new OpenAI({
   temperature: 0.5,
 })
 
 const questionTemplate = `You are a helpful prompt generator that generates question prompts .
 Given the content for a topic, it is your job to generate question prompts.
+Asks thought-provoking questions to stimulate intellectual curiosity, critical thinking, and self-directed learning.
 content : {content}`
 
 const questionPromptTemplate = new PromptTemplate({
@@ -67,6 +47,31 @@ const questionChain = new LLMChain({
   outputKey: "question",
 })
 
+const explainLikeFiveLLM = new ChatOpenAI({ temperature: 0.5 });
+
+const explainLikeFivePrompt = ChatPromptTemplate.fromPromptMessages([
+  SystemMessagePromptTemplate.fromTemplate(
+    `You are a helpful tutor that helps students learn about any topic.
+    Given the content for a topic, it is your job to explain the content in a way that a 10 year old would understand.
+    content: {content}
+      Explanation:`
+  )
+]);
+
+
+const likeFiveChain = new LLMChain({
+  llm: explainLikeFiveLLM,
+  prompt: explainLikeFivePrompt,
+  outputKey: "Explanation",
+})
+
+const explainLikeFiveChain = new SequentialChain({
+  chains: [topicChain, likeFiveChain],
+  inputVariables: ["topic"],
+  outputVariables: ["Explanation"],
+  verbose: true,
+})
+
 const overallChain = new SequentialChain({
   chains: [topicChain, questionChain],
   inputVariables: ["topic"],
@@ -75,12 +80,19 @@ const overallChain = new SequentialChain({
 })
 
 export default async function handler(req, res) {
-  const { topic } = req.body;
+  const { topic, action } = req.body;
 
   try {
-    const response = await overallChain.call({
-      topic: topic,
-    });
+    let response;
+    if (action === 'explainLikeFive') {
+      response = await explainLikeFiveChain.call({
+        topic: topic,
+      });
+    } else {
+      response = await overallChain.call({
+        topic: topic,
+      });
+    }
     res.status(200).json(response);
   } catch (error) {
     console.error("Error calling OpenAI API:", error);

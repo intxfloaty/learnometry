@@ -15,7 +15,7 @@
   align-items: center;
   overflow-y: auto;
   transition: all 0.3s ease;
-  gap: 16px;
+  gap: 30px;
   background-color: var(--color-bg);
   padding-bottom: 100px;
 }
@@ -28,20 +28,61 @@
   word-wrap: break-word;
   font-size: 1.2em;
   box-sizing: border-box;
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
 .responseTitle {
   font-size: 1.5em;
   font-weight: bold;
   margin-bottom: 10px;
-  /* text-transform: capitalize; */
 }
+
+
+.powerUpContainer {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  border-top: 1px dotted gray;
+  border-bottom: 1px dotted gray;
+}
+
+.powerUpBtn {
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.powerUpBtn:hover {
+  background-color: #1c86ee;
+}
+
+.powerUpBtn:active {
+  background-color: #187bcd;
+  transform: scale(0.95);
+}
+
 
 .promptSuggestions {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 30px;
+}
+
+.promptSuggestionsTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: blue;
+  text-transform: capitalize;
 }
 
 .clickableItem {
@@ -58,6 +99,10 @@
 .clickableItem:hover {
   background-color: rgba(0, 0, 0, 0.1);
   color: blue;
+}
+
+.clickableItem:active {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .container {

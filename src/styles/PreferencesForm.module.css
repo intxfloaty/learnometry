@@ -1,0 +1,18 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.preferenceSection {
+  margin-bottom: 1rem;
+}
+
+.sliderContainer {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+}
