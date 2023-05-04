@@ -8,9 +8,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 
 
-const PreferencesForm = () => {
-  // State for the depth preference
-  const [depth, setDepth] = React.useState(5);
+const PreferencesForm = ({ depth, setDepth }) => {
+
 
   // State for learning styles
   const [learningStyle, setLearningStyle] = React.useState('');
@@ -52,7 +51,7 @@ const PreferencesForm = () => {
           <Slider
             value={depth}
             min={1}
-            max={10}
+            max={5}
             step={1}
             marks
             onChange={handleDepthChange}
@@ -77,7 +76,7 @@ const PreferencesForm = () => {
           ))}
         </RadioGroup>
       </div>
-      <div className={styles.preferenceSection}>
+      {/* <div className={styles.preferenceSection}>
         <h4 style={{ marginBottom: "20px" }}>Custom Learning Method</h4>
         <TextField
           label="Describe your preferred learning method"
@@ -88,7 +87,7 @@ const PreferencesForm = () => {
           variant="outlined"
           fullWidth
         />
-      </div>
+      </div> */}
     </div>
   );
 };
