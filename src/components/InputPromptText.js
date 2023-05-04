@@ -16,9 +16,15 @@ const InputPromptText = () => {
   const [responses, setResponses] = useState([]);
   const [depthResponse, setDepthResponse] = useState({});
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
+  const [topic, setTopic] = React.useState('');
   // State for the depth preference
   const [depth, setDepth] = React.useState(1);
-  const [topic, setTopic] = React.useState('');
+
+  // State for learning styles
+  const [learningStyle, setLearningStyle] = React.useState('');
+
+  console.log(learningStyle, 'learningStyle')
+
 
 
   console.log(depthResponse, 'depthResponse')
@@ -35,17 +41,18 @@ const InputPromptText = () => {
 
   const fetchResponse = async (topic, depth_level) => {
     try {
-      if (topic && depth_level) {
+      if (topic && depth_level && learningStyle) {
         const res = await fetch('/api/learningContent', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ topic, depth_level }),
+          body: JSON.stringify({ topic, depth_level, learningStyle }),
         });
         const data = await res.json()
         const depthResponseData = {
           depth: depth_level,
+          learningStyle: learningStyle,
           text: data.text,
         };
         setDepthResponse(prevDepthResponse => ({
@@ -89,7 +96,7 @@ const InputPromptText = () => {
 
   const handleSavePrefernces = () => {
     const depth_level = depth !== '' ? `Level_${depth}` : '';
-    fetchResponse(topic, depth_level)
+    fetchResponse(topic, depth_level, learningStyle)
     handlePreferencesModalClose();
   }
 
@@ -195,6 +202,8 @@ const InputPromptText = () => {
           <PreferencesForm
             depth={depth}
             setDepth={setDepth}
+            learningStyle={learningStyle}
+            setLearningStyle={setLearningStyle}
           />
         </DialogContent>
         <DialogActions>

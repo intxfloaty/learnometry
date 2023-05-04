@@ -8,13 +8,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 
 
-const PreferencesForm = ({ depth, setDepth }) => {
-
-
-  // State for learning styles
-  const [learningStyle, setLearningStyle] = React.useState('');
-
-
+const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle}) => {
   // State for custom learning method
   const [customLearningMethod, setCustomLearningMethod] = React.useState('');
 
