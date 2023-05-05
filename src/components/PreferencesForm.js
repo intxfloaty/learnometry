@@ -70,7 +70,7 @@ const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle}) =>
           ))}
         </RadioGroup>
       </div>
-      {/* <div className={styles.preferenceSection}>
+      <div className={styles.preferenceSection}>
         <h4 style={{ marginBottom: "20px" }}>Custom Learning Method</h4>
         <TextField
           label="Describe your preferred learning method"
@@ -81,7 +81,7 @@ const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle}) =>
           variant="outlined"
           fullWidth
         />
-      </div> */}
+      </div>
     </div>
   );
 };
