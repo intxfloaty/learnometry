@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import ThemeToggleButton from './ThemeToggleButton';
 import styles from '../styles/Sidebar.module.css'
 import { ListItemButton, ListItemText, IconButton, Drawer, useMediaQuery, AppBar, Toolbar, Hidden } from '@mui/material';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import LayersIcon from '@mui/icons-material/Layers';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import TwitterIcon from '@mui/icons-material/Twitter';
 
 
 const Sidebar = () => {
@@ -29,30 +32,48 @@ const Sidebar = () => {
 
       <ListItemButton onClick={() => navigate('/profile')}>
         <IconButton >
-          <AccountBoxIcon />
+          <AddBoxIcon color='primary' />
         </IconButton>
-        <ListItemText primary="Profile" />
+        <ListItemText primary="New Stack" />
+      </ListItemButton>
+
+      <ListItemButton onClick={() => navigate('/profile')}>
+        <IconButton >
+          <LayersIcon color='primary' />
+        </IconButton>
+        <ListItemText primary="Your Stacks" />
       </ListItemButton>
 
       <ListItemButton onClick={() => {/* Add leaderboard functionality here */ }}>
         <IconButton >
-          <LeaderboardIcon />
+          <LeaderboardIcon color='primary' />
         </IconButton>
         <ListItemText primary="Leaderboard" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => {
-
-      }}>
-        <IconButton>
-          <LogoutIcon />
+      <ListItemButton>
+        <IconButton >
+          <TwitterIcon color='primary' />
         </IconButton>
-        <ListItemText primary="Log Out" />
+        <ListItemText primary="Follow" />
       </ListItemButton>
 
-      <div className={styles.themeToggleButtonContainer}>
-        <ThemeToggleButton />
+      <ListItemButton onClick={() => {/* Add leaderboard functionality here */ }}>
+        <IconButton >
+          <LoginIcon color='primary' />
+        </IconButton>
+        <ListItemText primary="Log In" />
+      </ListItemButton>
+
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "25px" }}>
+        <button className={styles.signUpBtn}>
+          <span >Sign Up</span>
+        </button>
       </div>
+
+      {/* <div className={styles.themeToggleButtonContainer}>
+        <ThemeToggleButton />
+      </div> */}
     </div>
   );
 
