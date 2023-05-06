@@ -1,0 +1,39 @@
+.backdrop {
+  backdrop-filter: blur(4px);
+}
+
+.modalTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closeButton {
+  margin-left: auto;
+  padding: 4px;
+}
+
+.emailContainer {
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+.emailTitle {
+  margin-bottom: 20px;
+}
+
+.googleSignIn {
+  background-color: #4285f4;
+  color: white;
+  border-color: #4285f4;
+  text-transform: none;
+}
+
+.googleSignIn:hover {
+  background-color: #357ae8;
+}
+
+
+.MuiDialog-root {
+  backdrop-filter: blur(2px);
+}

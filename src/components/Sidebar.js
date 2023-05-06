@@ -9,10 +9,22 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import AuthModal from './AuthModal';
 
 
 const Sidebar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  const handleAuthModalOpen = (mode) => {
+    setAuthModalOpen(true);
+  };
+
+  const handleAuthModalClose = () => {
+    setAuthModalOpen(false);
+  };
+
+
   const drawerWidth = 260;
 
   const isMobile = useMediaQuery('(max-width:1024px)'); // Adjust the breakpoint value as needed
@@ -58,7 +70,7 @@ const Sidebar = () => {
         <ListItemText primary="Follow" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => {/* Add leaderboard functionality here */ }}>
+      <ListItemButton onClick={() => handleAuthModalOpen()}>
         <IconButton >
           <LoginIcon color='primary' />
         </IconButton>
@@ -66,7 +78,7 @@ const Sidebar = () => {
       </ListItemButton>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "25px" }}>
-        <button className={styles.signUpBtn}>
+        <button className={styles.signUpBtn} onClick={() => handleAuthModalOpen()}>
           <span >Sign Up</span>
         </button>
       </div>
@@ -109,6 +121,7 @@ const Sidebar = () => {
       >
         {drawer}
       </Drawer>
+      <AuthModal open={authModalOpen} onClose={handleAuthModalClose} />
     </>
   )
 }
