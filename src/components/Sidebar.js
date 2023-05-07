@@ -10,20 +10,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import AuthModal from './AuthModal';
+import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { auth } from '../utils/firebase';
 
 
 const Sidebar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-
-  const handleAuthModalOpen = (mode) => {
-    setAuthModalOpen(true);
-  };
-
-  const handleAuthModalClose = () => {
-    setAuthModalOpen(false);
-  };
-
 
   const drawerWidth = 260;
 
@@ -42,21 +34,21 @@ const Sidebar = () => {
           src="/images/logo.svg" className={styles.logo} />
       </div>
 
-      <ListItemButton onClick={() => navigate('/profile')}>
+      <ListItemButton >
         <IconButton >
           <AddBoxIcon color='primary' />
         </IconButton>
         <ListItemText primary="New Stack" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => navigate('/profile')}>
+      <ListItemButton >
         <IconButton >
           <LayersIcon color='primary' />
         </IconButton>
         <ListItemText primary="Your Stacks" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => {/* Add leaderboard functionality here */ }}>
+      <ListItemButton >
         <IconButton >
           <LeaderboardIcon color='primary' />
         </IconButton>
@@ -70,18 +62,16 @@ const Sidebar = () => {
         <ListItemText primary="Follow" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => handleAuthModalOpen()}>
+      <ListItemButton onClick={() => signOut(auth).then(() => {
+        // Sign-out successful.
+      }).catch((error) => {
+        // An error happened.
+      })}>
         <IconButton >
-          <LoginIcon color='primary' />
+          <LogoutIcon color='primary' />
         </IconButton>
-        <ListItemText primary="Log In" />
+        <ListItemText primary="Log out" />
       </ListItemButton>
-
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "25px" }}>
-        <button className={styles.signUpBtn} onClick={() => handleAuthModalOpen()}>
-          <span >Sign Up</span>
-        </button>
-      </div>
 
       {/* <div className={styles.themeToggleButtonContainer}>
         <ThemeToggleButton />
@@ -121,7 +111,6 @@ const Sidebar = () => {
       >
         {drawer}
       </Drawer>
-      <AuthModal open={authModalOpen} onClose={handleAuthModalClose} />
     </>
   )
 }

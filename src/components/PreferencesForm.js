@@ -30,7 +30,6 @@ const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle}) =>
     storyTelling: "Utilizes narratives and anecdotes to make ideas engaging and memorable.",
     socratic: "Stimulates curiosity through thought-provoking questions and self-directed learning.",
     analogical: "Fosters deep understanding by comparing similarities between concepts.",
-    humorous: "Infuses wit and light-hearted elements for enjoyable, engaging content."
   };
 
 
@@ -39,7 +38,7 @@ const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle}) =>
       <div className={styles.preferenceSection}>
         <h4 style={{ marginBottom: "10px" }}>Depth</h4>
         <Typography variant="body2">
-          The desired learning depth ranges from elementary to advanced content. A lower depth, such as Level 1, covers fundamental ideas and generalizations, while a higher depth, like Level 10, addresses precise details, complexities, and unique scenarios related to the subject matter.
+          The desired learning depth ranges from elementary to advanced content. A lower depth, such as Level 1, covers fundamental ideas and generalizations, while a higher depth, like Level 5, addresses precise details, complexities, and unique scenarios related to the subject matter.
         </Typography>
         <div className={styles.sliderContainer}>
           <Slider

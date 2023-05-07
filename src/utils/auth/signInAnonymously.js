@@ -1,6 +1,6 @@
 // hooks/useAuth.js
 import { useEffect, useState } from "react";
-import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 
 const useAuth = () => {
@@ -13,20 +13,9 @@ const useAuth = () => {
         console.log(user, "signed in")
       } else {
         setUser(null);
-        signInAnonymously(auth)
-          .then(() => {
-            // Signed in..
-            console.log(user, "signed in")
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage)
-            // Handle errors here
-          });
+        console.log(user, "signed out")
       }
     });
-
     // Clean up the listener on unmount
     return () => unsubscribe();
   }, []);

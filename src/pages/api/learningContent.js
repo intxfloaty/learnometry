@@ -13,7 +13,7 @@ const chat = new ChatOpenAI({ temperature: 0 });
 const learningPrompt = ChatPromptTemplate.fromPromptMessages([
   SystemMessagePromptTemplate.fromTemplate(
     `You are a helpful tutor that helps students learn about any topic.
-    Given a topic, it is your job to generate content for that topic.
+    Given a topic, it is your job to generate content for that topic which will help students learn deeply.
     Topic: {topic}
       content:`
   ),
