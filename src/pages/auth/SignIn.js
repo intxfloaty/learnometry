@@ -72,7 +72,7 @@ const SignIn = () => {
             <Grid container spacing={2} alignItems="center" justifyContent="center">
               <Grid item xs={12}>
                 <Box textAlign="center">
-                  <Typography variant="h2" style={{ color: "blue", fontWeight: "bold" }}>Welcome</Typography>
+                  <Typography variant="h5" style={{ color: "blue", fontSize: "32px", fontWeight: "bolder" }}>Welcome to Learnometry</Typography>
                   <Typography variant="body2" style={{ color: "graytext", fontWeight: "bold" }}>Sign in or sign up to continue</Typography>
                 </Box>
               </Grid>
