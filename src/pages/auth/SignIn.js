@@ -73,7 +73,7 @@ const SignIn = () => {
               <Grid item xs={12}>
                 <Box textAlign="center">
                   <Typography variant="h5" style={{ color: "blue", fontSize: "32px", fontWeight: "bolder" }}>Welcome to Learnometry</Typography>
-                  <Typography variant="body2" style={{ color: "graytext", fontWeight: "bold" }}>Sign in or sign up to continue</Typography>
+                  <Typography variant="body2" style={{ color: "graytext", fontWeight: "bold" }}>Sign in or Sign up to continue</Typography>
                 </Box>
               </Grid>
               {error && (
