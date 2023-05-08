@@ -6,7 +6,6 @@ import { Button, TextField, Typography, Container, Box, Grid } from '@mui/materi
 import { Google } from '@mui/icons-material';
 
 
-
 const SignIn = () => {
   const provider = new GoogleAuthProvider();
   const [email, setEmail] = useState('');
@@ -52,64 +51,86 @@ const SignIn = () => {
 
   return (
     <div className={styles.parent}>
-      <Container maxWidth="xs">
-        <Box my={5}>
-          <Grid container spacing={2} alignItems="center" justifyContent="center">
-            <Grid item xs={12}>
-              <Box textAlign="center">
-                <img alt="Logo" src="/images/logo.svg" width={180} />
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Box textAlign="center">
-                <Typography variant="h3">WELCOME</Typography>
-                <Typography variant="subtitle1">Log In / Sign Up to continue</Typography>
-              </Box>
-            </Grid>
-            {error && (
-              <Grid item xs={12}>
-                <Typography color="error" align="center">
-                  {error}
-                </Typography>
-              </Grid>
-            )}
-            <Grid item xs={12}>
-              <form onSubmit={handleSubmit}>
-                <TextField
-                  fullWidth
-                  label="Email Address"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <Box mt={2}>
-                  <Button fullWidth variant="contained" size="large" type="submit">
-                    Continue
-                  </Button>
-                </Box>
-              </form>
-            </Grid>
-            <Grid item xs={8}>
-              <Box textAlign="center" mt={1} mb={1}>
-                <Typography variant="overline">OR</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                fullWidth
-                variant="outlined"
-                size="large"
-                type="submit"
-                startIcon={<Google />}
-                onClick={handleGoogleSignIn}
-              >
-                Continue with Google
-              </Button>
-            </Grid>
-          </Grid>
+      {/* <Grid item xs={12}>
+        <Box textAlign="center">
+          <img alt="Logo" src="/images/logo.svg" width={200} />
         </Box>
-      </Container>
+      </Grid> */}
+      <Box
+        width={{ xs: '100%', sm: '80%', md: '50%' }}
+        height={{ xs: '100%', sm: '80%', md: 'auto' }}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        boxShadow={20}
+        bgcolor="background.paper"
+        borderRadius={2}
+      >
+        <Container maxWidth="xs">
+          <Box my={5}>
+            <Grid container spacing={2} alignItems="center" justifyContent="center">
+              <Grid item xs={12}>
+                <Box textAlign="center">
+                  <Typography variant="h2" style={{ color: "blue", fontWeight: "bold" }}>Welcome</Typography>
+                  <Typography variant="body2" style={{ color: "graytext", fontWeight: "bold" }}>Sign in or sign up to continue</Typography>
+                </Box>
+              </Grid>
+              {error && (
+                <Grid item xs={12}>
+                  <Typography color="error" align="center">
+                    {error}
+                  </Typography>
+                </Grid>
+              )}
+              <Grid item xs={12}>
+                <form onSubmit={handleSubmit}>
+                  <Box mt={2} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                    <TextField
+                      fullWidth
+                      label="Email Address"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      sx={{ width: { xs: '100%', sm: '80%', md: '70%' } }}
+                    />
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      size="large"
+                      type="submit"
+                      sx={{ width: { xs: '100%', sm: '80%', md: '70%' }, marginTop: "10px" }}
+                      style={{ backgroundColor: 'black', color: 'white' }}
+                    >
+                      Continue
+                    </Button>
+                  </Box>
+                </form>
+              </Grid>
+              <Grid item xs={8}>
+                <Box textAlign="center" mt={1} mb={1}>
+                  <Typography variant="caption">OR</Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} display="flex" justifyContent="center">
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  size="large"
+                  type="submit"
+                  onClick={handleGoogleSignIn}
+                  sx={{ width: { xs: '100%', sm: '80%', md: '70%' } }}
+                  style={{ backgroundColor: 'black', color: 'white' }}
+                >
+                  <img alt="Google" src="/images/google-icon.svg" width={20} style={{ marginRight: "8px" }} />
+                  Continue with Google
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Container>
+      </Box>
     </div>
   );
 };
