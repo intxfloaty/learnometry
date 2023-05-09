@@ -9,8 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import AuthModal from './AuthModal';
-import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 import { auth } from '../utils/firebase';
 
 

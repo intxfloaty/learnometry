@@ -1,32 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../../styles/SignIn.module.css';
 import { auth } from "../../utils/firebase";
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { Button, TextField, Typography, Container, Box, Grid } from '@mui/material';
-import { Google } from '@mui/icons-material';
-
+import { sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 
 const SignIn = () => {
   const provider = new GoogleAuthProvider();
   const [email, setEmail] = useState('');
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
+
+  const actionCodeSettings = {
+    url: `${process.env.NEXT_PUBLIC_APP_URL}`,
+    handleCodeInApp: true,
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // setMessage('Sending email...');
 
-    try {
-      await sendEmailLink(email);
-      // setMessage('Email sent! Check your inbox for the sign-in link.');
-
-      // Save the email to localStorage to be used in email link handling
-      window.localStorage.setItem('emailForSignIn', email);
-    } catch (error) {
-      // setMessage('Error sending email: ' + error.message);
-      console.log(error)
-      // setError(error.message);
-    }
+    sendSignInLinkToEmail(auth, email, actionCodeSettings)
+      .then(() => {
+        // The link was successfully sent. Inform the user.
+        setMessage(`Email sent to ${email}! Please check your inbox!`);
+        // Save the email locally so you don't need to ask the user for it again
+        // if they open the link on the same device.
+        window.localStorage.setItem('emailForSignIn', email);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ...
+      });
   };
+
+
+  useEffect(() => {
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      let email = window.localStorage.getItem('emailForSignIn');
+      if (!email) {
+        // User opened the link on a different device. To prevent session fixation
+        // attacks, ask the user to provide the associated email again. For example:
+        email = window.prompt('Please provide your email for confirmation');
+      }
+      // The client SDK will parse the code from the link for you.
+      signInWithEmailLink(auth, email, window.location.href)
+        .then((result) => {
+          // Clear email from storage.
+          window.localStorage.removeItem('emailForSignIn');
+          // You can access the new user via result.user
+          // Additional user info profile not available via:
+          // result.additionalUserInfo.profile == null
+          // You can check if the user is new or existing:
+          // result.additionalUserInfo.isNewUser
+        })
+        .catch((error) => {
+          // Some error occurred, you can inspect the code: error.code
+          // Common errors could be invalid email and invalid or expired OTPs.
+        });
+    }
+  }, []);
 
   const handleGoogleSignIn = async () => {
     signInWithPopup(auth, provider)
@@ -107,6 +142,7 @@ const SignIn = () => {
                     </Button>
                   </Box>
                 </form>
+                {message && <Typography align="center">{message}</Typography>}
               </Grid>
               <Grid item xs={8}>
                 <Box textAlign="center" mt={1} mb={1}>
