@@ -57,6 +57,9 @@ const MyPlanModal = ({ open, handleClose }) => {
                     <ListItem disablePadding>
                       <Typography style={listItemStyle} align="center">3. Different learning Styles</Typography>
                     </ListItem>
+                    <ListItem disablePadding>
+                      <Typography style={listItemStyle} align="center">4. Stack history</Typography>
+                    </ListItem>
                   </List>
                 </Box>
                 <Box sx={{ mt: 'auto', display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -94,7 +97,10 @@ const MyPlanModal = ({ open, handleClose }) => {
                       <Typography style={listItemStyle} align="center">3. Different learning Styles</Typography>
                     </ListItem>
                     <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">4. Access to upcoming new features</Typography>
+                      <Typography style={listItemStyle} align="center">4. Stack history</Typography>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <Typography style={listItemStyle} align="center">5. Access to upcoming new features</Typography>
                     </ListItem>
                   </List>
                 </Box>
