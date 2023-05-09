@@ -9,6 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import PersonIcon from '@mui/icons-material/Person';
 import { signOut } from 'firebase/auth';
 import { auth } from '../utils/firebase';
 
@@ -53,6 +54,15 @@ const Sidebar = () => {
         </IconButton>
         <ListItemText primary="Leaderboard" />
       </ListItemButton>
+
+      <ListItemButton >
+        <IconButton >
+          <PersonIcon color='primary' />
+        </IconButton>
+        <ListItemText primary="My Plan" />
+        <div style={{ fontWeight: "bold", marginRight:"5px"}}>10</div>
+      </ListItemButton>
+
 
       <ListItemButton>
         <IconButton >
