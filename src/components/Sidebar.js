@@ -10,12 +10,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import PersonIcon from '@mui/icons-material/Person';
+import MyPlanModal from './MyPlanModal';
 import { signOut } from 'firebase/auth';
 import { auth } from '../utils/firebase';
 
 
 const Sidebar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
 
   const drawerWidth = 260;
 
@@ -24,6 +27,15 @@ const Sidebar = () => {
   const toggleDrawer = (open) => (event) => {
     setDrawerOpen(open);
   };
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
 
   const drawer = (
     <div className={styles.sidebar}>
@@ -55,12 +67,12 @@ const Sidebar = () => {
         <ListItemText primary="Leaderboard" />
       </ListItemButton>
 
-      <ListItemButton >
+      <ListItemButton onClick={handleModalOpen}>
         <IconButton >
           <PersonIcon color='primary' />
         </IconButton>
         <ListItemText primary="My Plan" />
-        <div style={{ fontWeight: "bold", marginRight:"5px"}}>10</div>
+        <div style={{ fontWeight: "bold", marginRight: "5px" }}>10</div>
       </ListItemButton>
 
 
@@ -120,6 +132,7 @@ const Sidebar = () => {
       >
         {drawer}
       </Drawer>
+      <MyPlanModal open={modalOpen} handleClose={handleModalClose} />
     </>
   )
 }
