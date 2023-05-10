@@ -85,12 +85,18 @@ const Sidebar = () => {
       </ListItemButton>
 
 
-      <ListItemButton>
-        <IconButton >
-          <TwitterIcon color='primary' />
-        </IconButton>
-        <ListItemText primary="Follow" />
-      </ListItemButton>
+      <a
+        href="https://twitter.com/omni_trix5" // Replace with your platform's Twitter account URL
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <ListItemButton>
+          <IconButton >
+            <TwitterIcon color='primary' />
+          </IconButton>
+          <ListItemText primary="Follow" />
+        </ListItemButton>
+      </a>
 
       <ListItemButton onClick={() => signOut(auth).then(() => {
         // Sign-out successful.
