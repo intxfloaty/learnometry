@@ -11,6 +11,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import PersonIcon from '@mui/icons-material/Person';
 import MyPlanModal from './MyPlanModal';
+import ComingSoonModal from './ComingSoonModal';
 import { signOut } from 'firebase/auth';
 import { auth } from '../utils/firebase';
 
@@ -18,6 +19,7 @@ import { auth } from '../utils/firebase';
 const Sidebar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [progressReportModalOpen, setProgressReportModalOpen] = useState(false);
 
 
   const drawerWidth = 260;
@@ -26,6 +28,14 @@ const Sidebar = () => {
 
   const toggleDrawer = (open) => (event) => {
     setDrawerOpen(open);
+  };
+
+  const handleProgressReportModalOpen = () => {
+    setProgressReportModalOpen(true);
+  };
+
+  const handleProgressReportModalClose = () => {
+    setProgressReportModalOpen(false);
   };
 
   const handleModalOpen = () => {
@@ -60,11 +70,11 @@ const Sidebar = () => {
         <ListItemText primary="Your Stacks" />
       </ListItemButton>
 
-      <ListItemButton >
+      <ListItemButton onClick={handleProgressReportModalOpen} >
         <IconButton >
           <LeaderboardIcon color='primary' />
         </IconButton>
-        <ListItemText primary="Leaderboard" />
+        <ListItemText primary="Progress Report" />
       </ListItemButton>
 
       <ListItemButton onClick={handleModalOpen}>
@@ -72,7 +82,6 @@ const Sidebar = () => {
           <PersonIcon color='primary' />
         </IconButton>
         <ListItemText primary="My Plan" />
-        <div style={{ fontWeight: "bold", marginRight: "5px" }}>10</div>
       </ListItemButton>
 
 
@@ -133,6 +142,10 @@ const Sidebar = () => {
         {drawer}
       </Drawer>
       <MyPlanModal open={modalOpen} handleClose={handleModalClose} />
+      <ComingSoonModal
+        open={progressReportModalOpen}
+        handleClose={handleProgressReportModalClose}
+      />
     </>
   )
 }

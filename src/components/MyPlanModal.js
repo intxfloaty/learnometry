@@ -28,7 +28,7 @@ const MyPlanModal = ({ open, handleClose }) => {
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth={modalMaxWidth}>
       <Typography style={{ padding: "10px", fontSize: "16px", fontWeight: "bold" }}>
-        Currently, you are on the Learnometry Free plan, which allows for 10 responses per day. Upgrade to Learnometry Pro or Learnometry Plus to enjoy unlimited daily responses and gain access to additional features.
+        Currently, you are on the Learnometry Free plan. Upgrade to Learnometry Pro or Learnometry Plus to enjoy unlimited daily responses and gain access to additional features.
       </Typography>
       <DialogContent>
         <Grid container spacing={gridSpacing}>
