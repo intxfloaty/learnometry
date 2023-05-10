@@ -9,6 +9,8 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import PreferencesForm from './PreferencesForm';
 import { Typography } from '@mui/material';
+import ComingSoonModal from './ComingSoonModal';
+
 
 
 const InputPromptText = () => {
@@ -16,6 +18,7 @@ const InputPromptText = () => {
   const [responses, setResponses] = useState([]);
   const [depthResponse, setDepthResponse] = useState({});
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
+  const [resourceModalOpen, setResourceModalOpen] = useState(false);
   const [topic, setTopic] = React.useState('');
   // State for the depth preference
   const [depth, setDepth] = React.useState(1);
@@ -34,6 +37,9 @@ const InputPromptText = () => {
     setPreferencesModalOpen(false);
   };
 
+  const handleResourceModalClose = () => {
+    setResourceModalOpen(false);
+  };
 
   const handleInputChange = (event) => {
     setInputText(event.target.value);
@@ -156,9 +162,9 @@ const InputPromptText = () => {
                       setPreferencesModalOpen(true)
                     }}
                   >
-                    Configure Preferences
+                    Learning Preference
                   </button>
-                  <button className={styles.powerUpBtn}>Resources</button>
+                  <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Resources</button>
                 </div>
                 <div className={styles.promptSuggestions}>
                   <div className={styles.promptSuggestionsTitle}>Deep Dive:</div>
@@ -215,6 +221,12 @@ const InputPromptText = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ComingSoonModal
+        open={resourceModalOpen}
+        handleClose={handleResourceModalClose}
+        modalType="resource"
+      />
     </div>
   );
 };
