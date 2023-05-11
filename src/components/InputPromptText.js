@@ -132,12 +132,12 @@ const InputPromptText = () => {
                 <div className={styles.depthContainer}>
                   {depthResponse[response.title] && depthResponse[response.title]?.map((responseDepth, index) => {
                     const textLines = responseDepth?.text?.split(/\r?\n/);
-
+                    const depthLevel = responseDepth?.depth.replace(/_/g, ' ')
                     return (
                       <React.Fragment key={index}>
                         <div className={styles.depthTitle}>
                           <ElectricBoltIcon style={{ color: 'black' }} />
-                          <span>Depth {responseDepth.depth}</span>
+                          <span>Depth {depthLevel}</span>
                         </div>
                         <div className={`${styles.depthText} ${styles[`depth${responseDepth.depth}`]}`}>
                           {textLines?.map((line, idx) => (
