@@ -24,7 +24,7 @@ const InputPromptText = () => {
   const [depth, setDepth] = React.useState(1);
 
   // State for learning styles
-  const [learningStyle, setLearningStyle] = React.useState('');
+  const [learningStyle, setLearningStyle] = React.useState('socratic');
 
   console.log(learningStyle, 'learningStyle')
 

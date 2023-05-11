@@ -8,7 +8,7 @@ import {
 } from "langchain/prompts";
 import { PromptTemplate } from "langchain/prompts";
 
-const chat = new ChatOpenAI({ temperature: 0 });
+const chat = new ChatOpenAI({ temperature: 1 });
 
 const learningPrompt = ChatPromptTemplate.fromPromptMessages([
   SystemMessagePromptTemplate.fromTemplate(

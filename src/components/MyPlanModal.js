@@ -49,16 +49,13 @@ const MyPlanModal = ({ open, handleClose }) => {
                 <Box sx={{ flexGrow: 1 }}>
                   <List>
                     <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">1. Powered by GPT 3.5</Typography>
+                      <Typography style={listItemStyle} align="center">1. Unlimited Responses/day</Typography>
                     </ListItem>
                     <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">2. Unlimited Responses/day</Typography>
+                      <Typography style={listItemStyle} align="center">2. Different learning Styles</Typography>
                     </ListItem>
                     <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">3. Different learning Styles</Typography>
-                    </ListItem>
-                    <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">4. Stack history</Typography>
+                      <Typography style={listItemStyle} align="center">3. Stack history</Typography>
                     </ListItem>
                   </List>
                 </Box>
@@ -88,19 +85,16 @@ const MyPlanModal = ({ open, handleClose }) => {
                 <Box sx={{ flexGrow: 1 }}>
                   <List>
                     <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">1. Powered by GPT 4</Typography>
+                      <Typography style={listItemStyle} align="center">1. Unlimited Responses/day</Typography>
                     </ListItem>
                     <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">2. Unlimited Responses/day</Typography>
+                      <Typography style={listItemStyle} align="center">2. Different learning Styles</Typography>
                     </ListItem>
                     <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">3. Different learning Styles</Typography>
+                      <Typography style={listItemStyle} align="center">3. Stack history</Typography>
                     </ListItem>
                     <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">4. Stack history</Typography>
-                    </ListItem>
-                    <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">5. Access to upcoming new features</Typography>
+                      <Typography style={listItemStyle} align="center">4. Access to upcoming new features</Typography>
                     </ListItem>
                   </List>
                 </Box>
