@@ -29,7 +29,6 @@ const InputPromptText = () => {
   console.log(learningStyle, 'learningStyle')
 
 
-
   console.log(depthResponse, 'depthResponse')
 
   // Close the preferences modal
@@ -164,6 +163,7 @@ const InputPromptText = () => {
                   >
                     Learning Preference
                   </button>
+                  <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Lesson Plan</button>
                   <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Resources</button>
                 </div>
                 <div className={styles.promptSuggestions}>

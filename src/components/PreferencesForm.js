@@ -8,13 +8,13 @@ import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 
 
-const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle}) => {
+const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle }) => {
   // State for custom learning method
-  const [customLearningMethod, setCustomLearningMethod] = React.useState('');
+  // const [customLearningMethod, setCustomLearningMethod] = React.useState('');
 
-  const handleCustomLearningMethodChange = (event) => {
-    setCustomLearningMethod(event.target.value);
-  };
+  // const handleCustomLearningMethodChange = (event) => {
+  //   setCustomLearningMethod(event.target.value);
+  // };
 
   const handleDepthChange = (event, newValue) => {
     setDepth(newValue);
@@ -69,7 +69,7 @@ const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle}) =>
           ))}
         </RadioGroup>
       </div>
-      <div className={styles.preferenceSection}>
+      {/* <div className={styles.preferenceSection}>
         <h4 style={{ marginBottom: "20px" }}>Custom Learning Method</h4>
         <TextField
           label="Describe your preferred learning method"
@@ -80,7 +80,7 @@ const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle}) =>
           variant="outlined"
           fullWidth
         />
-      </div>
+      </div> */}
     </div>
   );
 };

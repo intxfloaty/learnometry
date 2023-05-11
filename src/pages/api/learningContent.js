@@ -49,40 +49,78 @@ const questionChain = new LLMChain({
 
 const depthLevelLLM = new ChatOpenAI({ temperature: 0.5 });
 
-const depthLevelPrompt = ChatPromptTemplate.fromPromptMessages([
-  SystemMessagePromptTemplate.fromTemplate(
-    `You are a helpful tutor that helps students learn about any topic.
-      Given a topic, depth_level and learning style, it is your job to generate content for that topic according to the specified depth_level and learning style.
-      "description": "This is the depth of the content the student wants to learn. A low depth will cover the basics, and generalizations while a high depth will cover the specifics, details, unfamiliar, complex, and side cases. The lowest depth level is 1, and the highest is 5.",
-      "depth_levels": 
-          "Level_1": "Surface level: Covers topic basics with simple definitions and brief explanations, suitable for beginners or quick overviews.",
-          "Level_2": "Expanded understanding: Elaborates basic concepts, introduces foundational principles, and explores connections for broader understanding.",
-          "Level_3": "Detailed analysis: Provides in-depth explanations, examples, and context, discussing components, interrelationships, and relevant theories.",
-          "Level_4": "Practical application: Focuses on real-world applications, case studies, and problem-solving techniques for effective knowledge application.",
-          "Level_5": "Advanced concepts: Introduces advanced techniques and tools, covering cutting-edge developments, innovations, and research.",
-          
-          learning Styles:
-            textbook: "Adopts textbook-style language with well-structured sentences and rich vocabulary.",
-            layman: "Simplifies complex ideas with everyday language and relatable examples.",
-            storyTelling: "Utilizes narratives and anecdotes to make ideas engaging and memorable.",
-            socratic: "Stimulates curiosity through thought-provoking questions and self-directed learning.",
-            analogical: "Fosters deep understanding by comparing similarities between concepts.",
-            humorous: "Infuses wit and light-hearted elements for enjoyable, engaging content."
-          
-      topic: {topic}
-      depth_level: {depth_level}
-      learningStyle: {learningStyle}
-      content:`
-  ),
-  HumanMessagePromptTemplate.fromTemplate("{topic}", "{depth_level}"),
-]);
+const depthLevelTemplate = (depth_level, learningStyle) => {
+  let content = `You are a helpful tutor that helps students learn about any topic.
+  Given a {topic}, {depth_level} and {learningStyle}, it is your job to generate content for that topic according to the specified depth_level and learning style.`
+  switch (depth_level) {
+    case 'Level_1':
+      // Define Level_1 content
+      content += `Imagine you have just heard about {topic} for the first time. 
+      Provide a simple and brief explanation that covers the fundamental aspects. 
+      Aim for a level of understanding appropriate for someone with no prior knowledge of the subject.`;
+      break;
+    case 'Level_2':
+      // Define Level_2 content
+      content += `Now that you have the basics of {topic}, dive deeper. 
+      Explore and elaborate on the foundational principles, introduce related concepts, and describe how these ideas interconnect to form a broader understanding of the topic`;
+      break;
+    case 'Level_3':
+      // Define Level_3 content
+      content += `Let's delve further into {topic}. 
+      Provide a comprehensive and detailed explanation. 
+      Discuss the components, interrelationships, and relevant theories. 
+      Use examples and give context where necessary to provide a full picture.`;
+      break;
+    case 'Level_4':
+      // Define Level_4 content
+      content += `With a solid understanding of {topic}, it's time to apply what you've learned. 
+      Discuss real-world applications and case studies related to the topic. 
+      Highlight problem-solving techniques that could be used in these situations`;
+      break;
+    case 'Level_5':
+      // Define Level_5 content
+      content += `At this depth level, you're ready to tackle the most advanced aspects of {topic}. 
+      Introduce cutting-edge techniques, innovations, and recent research. 
+      Discuss the potential future developments and implications of these advanced concepts.`;
+      break;
+  }
 
+  switch (learningStyle) {
+    case 'textbook':
+      // Define textbook learning style
+      content += `"Explain {topic} as if you're writing a chapter in a textbook. 
+      Use well-structured sentences, a rich vocabulary, and maintain an academic tone. 
+      Ensure the content is organized logically and cohesively.`;
+      break;
+    case 'layman':
+      // Define layman learning style
+      content += `Simplify {topic} for someone without any background in the subject. 
+      Use everyday language, clear explanations, and relatable examples to make the topic easily understandable.`;
+      break;
+    case 'storyTelling':
+      // Define storyTelling learning style
+      content += `Narrate a story revolving around {topic}. 
+      Use characters, plot, and setting to bring the topic to life. 
+      The narrative should be engaging, memorable, and effectively convey the essential aspects of the topic.`;
+      break;
+    case 'socratic':
+      // Define socratic learning style
+      content += `Approach the explanation of {topic} through a series of thought-provoking questions. 
+      Encourage self-directed learning and stimulate curiosity about the subject`;
+      break;
+    case 'analogical':
+      // Define analogical learning style
+      content += `Use analogies to explain {topic}. 
+      Identify concepts that are similar to the topic and use these comparisons to foster a deeper understanding of the subject.`;
+      break;
+  }
+  return content;
+}
 
-const depthLevelChain = new LLMChain({
-  llm: depthLevelLLM,
-  prompt: depthLevelPrompt,
-  verbose: true,
-})
+// const depthLevelPrompt = ChatPromptTemplate.fromPromptMessages([
+//   SystemMessagePromptTemplate.fromTemplate(depthLevelTemplate(depth_level, learningStyle)),
+//   HumanMessagePromptTemplate.fromTemplate("{topic}", "{depth_level}"),
+// ]);
 
 
 const overallChain = new SequentialChain({
@@ -95,6 +133,19 @@ const overallChain = new SequentialChain({
 export default async function handler(req, res) {
   const { topic, depth_level, learningStyle } = req.body;
   console.log(topic, depth_level, "topic")
+
+
+  const depthLevelPrompt = ChatPromptTemplate.fromPromptMessages([
+    SystemMessagePromptTemplate.fromTemplate(depthLevelTemplate(depth_level, learningStyle)),
+    HumanMessagePromptTemplate.fromTemplate("{topic}", "{depth_level}"),
+  ]);
+
+
+  const depthLevelChain = new LLMChain({
+    llm: depthLevelLLM,
+    prompt: depthLevelPrompt,
+    verbose: true,
+  })
 
   try {
     let response;
