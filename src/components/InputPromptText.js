@@ -136,8 +136,8 @@ const InputPromptText = () => {
                     return (
                       <React.Fragment key={index}>
                         <div className={styles.depthTitle}>
-                          <ElectricBoltIcon style={{ color: 'black' }} />
-                          <span>Depth {depthLevel}</span>
+                          <div>Depth: <span style={{ color: "blue", fontSize: "1.1em" }}>{depthLevel}</span></div>
+                          <div>Learning Style: <span style={{ color: "blue", fontSize: "1.1em", textTransform: "capitalize" }}>{responseDepth.learningStyle}</span></div>
                         </div>
                         <div className={`${styles.depthText} ${styles[`depth${responseDepth.depth}`]}`}>
                           {textLines?.map((line, idx) => (
