@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import ThemeToggleButton from './ThemeToggleButton';
+import Link from 'next/link';
 import styles from '../styles/Sidebar.module.css'
 import { ListItemButton, ListItemText, IconButton, Drawer, useMediaQuery, AppBar, Toolbar, Hidden } from '@mui/material';
 import LayersIcon from '@mui/icons-material/Layers';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
-import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -56,19 +55,23 @@ const Sidebar = () => {
           src="/images/logo.svg" className={styles.logo} />
       </div>
 
-      <ListItemButton >
-        <IconButton >
-          <AddBoxIcon color='primary' />
-        </IconButton>
-        <ListItemText primary="New Stack" />
-      </ListItemButton>
+      <Link href="/">
+        <ListItemButton >
+          <IconButton >
+            <AddBoxIcon color='primary' />
+          </IconButton>
+          <ListItemText primary="New Stack" />
+        </ListItemButton>
+      </Link>
 
-      <ListItemButton >
-        <IconButton >
-          <LayersIcon color='primary' />
-        </IconButton>
-        <ListItemText primary="Your Stacks" />
-      </ListItemButton>
+      <Link href="/stacks">
+        <ListItemButton>
+          <IconButton >
+            <LayersIcon color='primary' />
+          </IconButton>
+          <ListItemText primary="Your Stacks" />
+        </ListItemButton>
+      </Link>
 
       <ListItemButton onClick={handleProgressReportModalOpen} >
         <IconButton >

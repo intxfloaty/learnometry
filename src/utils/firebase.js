@@ -20,16 +20,25 @@ export const auth = getAuth(app);
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
-export const saveStackHistory = (stack) => {
-  const stackHistory = collection(db, "stackHistory");
-  addDoc(stackHistory, {
-    stack: stack,
-    timestamp: new Date(),
-  })
-    .then((docRef) => {
-      console.log("Document written with ID: ", docRef.id);
-    })
-    .catch((error) => {
-      console.error("Error adding document: ", error);
+export const saveStackHistory = async (stack) => {
+  const myStack = collection(db, "myStack");
+
+  try {
+    const docRef = await addDoc(myStack, {
+      stackName: stack.title,
+      timestamp: new Date(),
     });
+
+    console.log("Document written with ID: ", docRef.id);
+
+    const subStacks = collection(docRef, "subStacks");
+    const stackContentRef = await addDoc(subStacks, {
+      stack: stack,
+      timestamp: new Date(),
+    });
+
+    console.log("Document written with ID: ", stackContentRef.id);
+  } catch (error) {
+    console.error("Error adding document: ", error);
+  }
 }
