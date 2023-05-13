@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../styles/InputPromptText.module.css';
 import SendIcon from '@mui/icons-material/Send';
-import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,6 +9,7 @@ import Button from '@mui/material/Button';
 import PreferencesForm from './PreferencesForm';
 import { Typography } from '@mui/material';
 import ComingSoonModal from './ComingSoonModal';
+import { saveStackHistory } from '@/utils/firebase';
 
 
 
@@ -26,9 +26,7 @@ const InputPromptText = () => {
   // State for learning styles
   const [learningStyle, setLearningStyle] = React.useState('socratic');
 
-  console.log(learningStyle, 'learningStyle')
-
-
+  console.log(responses, 'responses')
   console.log(depthResponse, 'depthResponse')
 
   // Close the preferences modal
@@ -82,6 +80,7 @@ const InputPromptText = () => {
           prompts: data.question,
         }
         setResponses((prevResponses) => [responseData, ...prevResponses]);
+        saveStackHistory(responseData);
       }
     } catch (error) {
       console.error("Error calling OpenAI API:", error);

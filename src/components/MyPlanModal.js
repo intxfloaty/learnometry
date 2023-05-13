@@ -94,7 +94,10 @@ const MyPlanModal = ({ open, handleClose }) => {
                       <Typography style={listItemStyle} align="center">3. Stack history</Typography>
                     </ListItem>
                     <ListItem disablePadding>
-                      <Typography style={listItemStyle} align="center">4. Access to upcoming new features</Typography>
+                      <Typography style={listItemStyle} align="center">4.Chat with PDF</Typography>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <Typography style={listItemStyle} align="center">5. Access to upcoming new features</Typography>
                     </ListItem>
                   </List>
                 </Box>
