@@ -9,9 +9,7 @@ import Button from '@mui/material/Button';
 import PreferencesForm from './PreferencesForm';
 import { Typography } from '@mui/material';
 import ComingSoonModal from './ComingSoonModal';
-import { saveStackHistory } from '@/utils/firebase';
-
-
+import { saveStackHistory, saveSubStack } from '@/utils/firebase';
 
 const InputPromptText = () => {
   const [inputText, setInputText] = useState('');
@@ -20,6 +18,7 @@ const InputPromptText = () => {
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [resourceModalOpen, setResourceModalOpen] = useState(false);
   const [topic, setTopic] = React.useState('');
+  const [stackId, setStackId] = useState();
   // State for the depth preference
   const [depth, setDepth] = React.useState(1);
 
@@ -80,7 +79,12 @@ const InputPromptText = () => {
           prompts: data.question,
         }
         setResponses((prevResponses) => [responseData, ...prevResponses]);
-        saveStackHistory(responseData);
+        if (responses.length === 0) {
+         const stackId = await saveStackHistory(responseData);
+         setStackId(stackId);
+        } else {
+          await saveSubStack(stackId, responseData);
+        }
       }
     } catch (error) {
       console.error("Error calling OpenAI API:", error);
@@ -92,7 +96,7 @@ const InputPromptText = () => {
     setInputText('');
   };
 
-  function handleClick(prompt) {
+  function handlePromptClick(prompt) {
     const cleanedPrompt = prompt.replace(/^\d+\.\s*/, '');
     fetchResponse(cleanedPrompt);
   }
@@ -171,7 +175,7 @@ const InputPromptText = () => {
                     <button
                       key={idx}
                       className={styles.clickableItem}
-                      onClick={() => handleClick(prompt)}
+                      onClick={() => handlePromptClick(prompt)}
                     >
                       {prompt}
                     </button>

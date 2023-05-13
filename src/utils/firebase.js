@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, addDoc, getDocs  } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -38,7 +38,45 @@ export const saveStackHistory = async (stack) => {
     });
 
     console.log("Document written with ID: ", stackContentRef.id);
+
+
+    // Return the stackId for later use
+    return docRef.id;
+
   } catch (error) {
     console.error("Error adding document: ", error);
+  }
+}
+
+export const saveSubStack = async (stackId, subStack) => {
+  const myStackRef = doc(db, "myStack", stackId);
+  const subStacksCollection = collection(myStackRef, "subStacks");
+
+  try {
+    const subStackRef = await addDoc(subStacksCollection, {
+      stack: subStack,
+      timestamp: new Date(),
+    });
+
+    console.log("Sub-stack document written with ID: ", subStackRef.id);
+  } catch (error) {
+    console.error("Error adding sub-stack document: ", error);
+  }
+}
+
+
+export const fetchStacks = async () => {
+  const myStack = collection(db, "myStack");
+
+  try {
+    const snapshot = await getDocs(myStack);
+    const stacks = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    return stacks;
+  } catch (error) {
+    console.error("Error fetching stacks: ", error);
   }
 }
