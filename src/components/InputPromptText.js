@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import PreferencesForm from './PreferencesForm';
 import { Typography } from '@mui/material';
 import ComingSoonModal from './ComingSoonModal';
-import { saveStackHistory, saveSubStack } from '@/utils/firebase';
+import { saveStackHistory, saveSubStack, updateSubStack } from '@/utils/firebase';
 
 const InputPromptText = () => {
   const [inputText, setInputText] = useState('');
@@ -19,6 +19,9 @@ const InputPromptText = () => {
   const [resourceModalOpen, setResourceModalOpen] = useState(false);
   const [topic, setTopic] = React.useState('');
   const [stackId, setStackId] = useState();
+  const [subStackId, setSubStackId] = useState();
+
+  console.log(stackId, subStackId, 'stackId, subStackId')
   // State for the depth preference
   const [depth, setDepth] = React.useState(1);
 
@@ -63,6 +66,7 @@ const InputPromptText = () => {
             ? [...prevDepthResponse[topic], depthResponseData]
             : [depthResponseData],
         }));
+        updateSubStack(stackId, subStackId, depthResponseData)
       }
       else {
         const res = await fetch('/api/learningContent', {
@@ -78,12 +82,14 @@ const InputPromptText = () => {
           text: data.content,
           prompts: data.question,
         }
-        setResponses((prevResponses) => [responseData, ...prevResponses]);
+        setResponses((prevResponses) => [...prevResponses, responseData]);
         if (responses.length === 0) {
-         const stackId = await saveStackHistory(responseData);
-         setStackId(stackId);
+          const { stackId, subStackId } = await saveStackHistory(responseData);
+          setStackId(stackId);
+          setSubStackId(subStackId);
         } else {
-          await saveSubStack(stackId, responseData);
+          const subStackId = await saveSubStack(stackId, responseData);
+          setSubStackId(subStackId)
         }
       }
     } catch (error) {
@@ -114,7 +120,7 @@ const InputPromptText = () => {
       {
         responses.length != 0 &&
         <div className={styles.responseArea}>
-          {responses?.reverse().map((response, index) => {
+          {responses?.map((response, index) => {
             const textLines = response?.text?.split(/\r?\n/);
             const promptList = response?.prompts?.split(/\r?\n/).slice(3);
             return (
@@ -166,6 +172,7 @@ const InputPromptText = () => {
                   >
                     Learning Preference
                   </button>
+                  <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Explain Like I'm 5</button>
                   <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Lesson Plan</button>
                   <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Resources</button>
                 </div>
@@ -219,8 +226,8 @@ const InputPromptText = () => {
           <Button onClick={handlePreferencesModalClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSavePrefernces} color="primary" variant="contained">
-            Save Preferences
+          <Button className={styles.powerUpBtn} onClick={handleSavePrefernces} variant="contained">
+            <SendIcon style={{ color: 'white' }} />
           </Button>
         </DialogActions>
       </Dialog>
