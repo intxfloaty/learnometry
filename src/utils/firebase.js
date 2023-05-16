@@ -32,13 +32,21 @@ export const saveStackHistory = async (stack) => {
     console.log("Document written with ID: ", docRef.id);
 
     const subStacks = collection(docRef, "subStacks");
+
+    // Add the document first to get the ID
     const stackContentRef = await addDoc(subStacks, {
-      stack: stack,
+      stack: { ...stack, id: '' },  // Temporary placeholder for ID
       timestamp: new Date(),
     });
 
     console.log("Document written with ID: ", stackContentRef.id);
 
+    // Update the 'stack' field in the document with its own ID
+    await updateDoc(stackContentRef, {
+      'stack.id': stackContentRef.id,  // Update the id inside the stack object
+    });
+
+    console.log("Sub-stack document updated with its own ID inside the stack object");
 
     // Return the Id's for later use
     return { stackId: docRef.id, subStackId: stackContentRef.id };
@@ -48,23 +56,33 @@ export const saveStackHistory = async (stack) => {
   }
 }
 
+
+
 export const saveSubStack = async (stackId, subStack) => {
   const myStackRef = doc(db, "myStack", stackId);
   const subStacksCollection = collection(myStackRef, "subStacks");
 
   try {
     const subStackRef = await addDoc(subStacksCollection, {
-      stack: subStack,
+      stack: { ...subStack, id: '' },  // Temporary placeholder for ID
       timestamp: new Date(),
     });
 
     console.log("Sub-stack document written with ID: ", subStackRef.id);
+
+    // Update the document with its own ID
+    await updateDoc(subStackRef, {
+      'stack.id': subStackRef.id,  // Update the id inside the stack object
+    });
+
+    console.log("Sub-stack document updated with its own ID");
 
     return subStackRef.id;
   } catch (error) {
     console.error("Error adding sub-stack document: ", error);
   }
 }
+
 
 export const updateSubStack = async (stackId, subStackId, topic, depthResponseData) => {
   const myStackRef = doc(db, "myStack", stackId);

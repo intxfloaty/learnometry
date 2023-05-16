@@ -8,6 +8,7 @@ import { fetchSubStacks } from '@/utils/firebase'
 const StackPage = () => {
   const router = useRouter()
   const { id } = router.query
+  const [subId, setSubId] = useState(null); // [id].js
   const [stack, setStack] = useState(null);
   const [responses, setResponses] = useState([]);
   const [depthResponse, setDepthResponse] = useState({});
@@ -44,8 +45,6 @@ const StackPage = () => {
   }, [stack]);
 
 
-
-
   return (
     <div>
       <main className={styles.main} >
@@ -55,6 +54,8 @@ const StackPage = () => {
           setResponses={setResponses}
           depthResponse={depthResponse}
           setDepthResponse={setDepthResponse}
+          id={id}
+          subId={subId}
         />
       </main>
     </div>

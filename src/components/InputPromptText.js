@@ -11,7 +11,7 @@ import { Typography } from '@mui/material';
 import ComingSoonModal from './ComingSoonModal';
 import { saveStackHistory, saveSubStack, updateSubStack } from '@/utils/firebase';
 
-const InputPromptText = ({ responses, setResponses, depthResponse, setDepthResponse }) => {
+const InputPromptText = ({ responses, setResponses, depthResponse, setDepthResponse, id }) => {
   const [inputText, setInputText] = useState('');
   // const [responses, setResponses] = useState([]);
   // const [depthResponse, setDepthResponse] = useState({});
@@ -21,7 +21,8 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
   const [stackId, setStackId] = useState();
   const [subStackId, setSubStackId] = useState();
 
-  console.log(stackId, subStackId, 'stackId, subStackId')
+  console.log(subStackId, 'subStackId')
+
   // State for the depth preference
   const [depth, setDepth] = React.useState(1);
 
@@ -66,7 +67,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
             ? [...prevDepthResponse[topic], depthResponseData]
             : [depthResponseData],
         }));
-        updateSubStack(stackId, subStackId, topic, depthResponseData);
+        updateSubStack(stackId || id, subStackId, topic, depthResponseData);
       }
       else {
         const res = await fetch('/api/learningContent', {
@@ -88,7 +89,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
           setStackId(stackId);
           setSubStackId(subStackId);
         } else {
-          const subStackId = await saveSubStack(stackId, responseData);
+          const subStackId = await saveSubStack(stackId || id, responseData);
           setSubStackId(subStackId)
         }
       }
@@ -171,6 +172,10 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
                     className={styles.powerUpBtn}
                     onClick={() => {
                       setTopic(response.title);
+                      console.log(response?.id, 'response?.id')
+                      if (response?.id) {
+                        setSubStackId(response?.id)
+                      }
                       setPreferencesModalOpen(true)
                     }}
                   >
