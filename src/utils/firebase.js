@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, doc, addDoc, getDocs, updateDoc, arrayUnion } from "firebase/firestore";
+import { getFirestore, collection, doc, addDoc, getDocs, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -66,15 +66,29 @@ export const saveSubStack = async (stackId, subStack) => {
   }
 }
 
-export const updateSubStack = async (stackId, subStackId, depthStack) => {
+export const updateSubStack = async (stackId, subStackId, topic, depthResponseData) => {
   const myStackRef = doc(db, "myStack", stackId);
   const subStacksCollection = collection(myStackRef, "subStacks");
   const subStackRef = doc(subStacksCollection, subStackId);
 
   try {
-    await updateDoc(subStackRef, {
-      depthStack: arrayUnion(depthStack),
-    });
+    // Fetch existing document
+    const docSnapshot = await getDoc(subStackRef);
+    if (!docSnapshot.exists()) {
+      console.error('No such document exists!');
+      return;
+    }
+    let currentData = docSnapshot.data();
+
+    // If the topic already exists, append to it. Otherwise, create a new array
+    if (currentData.depthStack && currentData.depthStack[topic]) {
+      currentData.depthStack[topic].push(depthResponseData);
+    } else {
+      currentData.depthStack = { ...currentData.depthStack, [topic]: [depthResponseData] };
+    }
+
+    // Update the document with the new data
+    await updateDoc(subStackRef, currentData);
 
     console.log("Sub-stack document updated with ID: ", subStackRef.id);
   } catch (error) {
@@ -95,5 +109,22 @@ export const fetchStacks = async () => {
     return stacks;
   } catch (error) {
     console.error("Error fetching stacks: ", error);
+  }
+}
+
+export const fetchSubStacks = async (stackId) => {
+  const myStackRef = doc(db, "myStack", stackId);
+  const subStacksCollection = collection(myStackRef, "subStacks");
+
+  try {
+    const snapshot = await getDocs(subStacksCollection);
+    const subStacks = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    return subStacks;
+  } catch (error) {
+    console.error("Error fetching sub-stacks: ", error);
   }
 }

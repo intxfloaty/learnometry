@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/InputPromptText.module.css';
 import SendIcon from '@mui/icons-material/Send';
 import Dialog from '@mui/material/Dialog';
@@ -11,10 +11,10 @@ import { Typography } from '@mui/material';
 import ComingSoonModal from './ComingSoonModal';
 import { saveStackHistory, saveSubStack, updateSubStack } from '@/utils/firebase';
 
-const InputPromptText = () => {
+const InputPromptText = ({ responses, setResponses, depthResponse, setDepthResponse }) => {
   const [inputText, setInputText] = useState('');
-  const [responses, setResponses] = useState([]);
-  const [depthResponse, setDepthResponse] = useState({});
+  // const [responses, setResponses] = useState([]);
+  // const [depthResponse, setDepthResponse] = useState({});
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [resourceModalOpen, setResourceModalOpen] = useState(false);
   const [topic, setTopic] = React.useState('');
@@ -66,7 +66,7 @@ const InputPromptText = () => {
             ? [...prevDepthResponse[topic], depthResponseData]
             : [depthResponseData],
         }));
-        updateSubStack(stackId, subStackId, depthResponseData)
+        updateSubStack(stackId, subStackId, topic, depthResponseData);
       }
       else {
         const res = await fetch('/api/learningContent', {
@@ -115,10 +115,14 @@ const InputPromptText = () => {
   }
 
 
+  useEffect(() => {
+
+  }, [])
+
   return (
     <div className={styles.wrapper}>
       {
-        responses.length != 0 &&
+        responses?.length != 0 &&
         <div className={styles.responseArea}>
           {responses?.map((response, index) => {
             const textLines = response?.text?.split(/\r?\n/);
@@ -138,7 +142,7 @@ const InputPromptText = () => {
                 </div>
 
                 <div className={styles.depthContainer}>
-                  {depthResponse[response.title] && depthResponse[response.title]?.map((responseDepth, index) => {
+                  {depthResponse[response?.title] && depthResponse[response?.title]?.map((responseDepth, index) => {
                     const textLines = responseDepth?.text?.split(/\r?\n/);
                     const depthLevel = responseDepth?.depth.replace(/_/g, ' ')
                     return (

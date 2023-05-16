@@ -21,7 +21,7 @@ function Stacks() {
   return (
     <main className={styles.main}>
       <Sidebar />
-      <Grid container spacing={3} style={{marginLeft:"10px"}}>
+      <Grid container spacing={3} style={{ marginLeft: "10px" }}>
         {stacks.map((stack) => (
           <Grid item xs={12} sm={6} md={4} key={stack.id}>
             <Link href={`/stacks/${stack.id}`} passHref>

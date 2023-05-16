@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import styles from '@/styles/Home.module.css'
 import useAuth from "../utils/auth/signInAnonymously";
 import Sidebar from '@/components/Sidebar'
@@ -7,8 +8,10 @@ import SignIn from './auth/SignIn';
 
 export default function Home() {
   const user = useAuth();
+  const [responses, setResponses] = useState([]);
+  const [depthResponse, setDepthResponse] = useState({});
 
-  if(!user) {
+  if (!user) {
     return <SignIn />
   }
   return (
@@ -16,9 +19,14 @@ export default function Home() {
       {user &&
         <main className={styles.main} >
           <Sidebar />
-          <InputPromptText />
+          <InputPromptText
+            responses={responses}
+            setResponses={setResponses}
+            depthResponse={depthResponse}
+            setDepthResponse={setDepthResponse}
+          />
         </main>
-        } 
+      }
     </>
   )
 }
