@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, doc, addDoc, getDocs, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { getFirestore, collection, doc, addDoc, getDocs, getDoc, updateDoc, query, orderBy } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -118,7 +118,7 @@ export const fetchStacks = async () => {
   const myStack = collection(db, "myStack");
 
   try {
-    const snapshot = await getDocs(myStack);
+    const snapshot = await getDocs(query(myStack, orderBy('timestamp')));
     const stacks = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
@@ -135,7 +135,7 @@ export const fetchSubStacks = async (stackId) => {
   const subStacksCollection = collection(myStackRef, "subStacks");
 
   try {
-    const snapshot = await getDocs(subStacksCollection);
+    const snapshot = await getDocs(query(subStacksCollection, orderBy('timestamp')));
     const subStacks = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
