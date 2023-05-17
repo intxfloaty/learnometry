@@ -10,6 +10,8 @@ import PreferencesForm from './PreferencesForm';
 import { Typography } from '@mui/material';
 import ComingSoonModal from './ComingSoonModal';
 import { saveStackHistory, saveSubStack, updateSubStack } from '@/utils/firebase';
+import { useRouter } from 'next/router'
+
 
 const InputPromptText = ({ responses, setResponses, depthResponse, setDepthResponse, id }) => {
   const [inputText, setInputText] = useState('');
@@ -20,8 +22,9 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
   const [topic, setTopic] = React.useState('');
   const [stackId, setStackId] = useState();
   const [subStackId, setSubStackId] = useState();
+  const router = useRouter()
 
-  console.log(subStackId, 'subStackId')
+  // console.log(stackId, 'subStackId')
 
   // State for the depth preference
   const [depth, setDepth] = React.useState(1);
@@ -117,8 +120,15 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
 
 
   useEffect(() => {
-
-  }, [])
+    if (window.performance) {
+      const navigationEntry = window.performance.getEntriesByType("navigation")[0];
+      if (navigationEntry && navigationEntry.type === 'reload') {
+        if (stackId && responses) {
+          router.push(`/stacks/${stackId}`);
+        }
+      }
+    }
+  }, [stackId]);
 
   return (
     <div className={styles.wrapper}>

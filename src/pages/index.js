@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from '@/styles/Home.module.css'
 import useAuth from "../utils/auth/signInAnonymously";
 import Sidebar from '@/components/Sidebar'
