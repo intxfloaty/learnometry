@@ -15,8 +15,9 @@ import { useRouter } from 'next/router'
 
 const InputPromptText = ({ responses, setResponses, depthResponse, setDepthResponse, id }) => {
   const [inputText, setInputText] = useState('');
-  // const [responses, setResponses] = useState([]);
-  // const [depthResponse, setDepthResponse] = useState({});
+  const [tokens, setTokens] = useState([])
+
+  console.log(tokens, 'tokens')
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [resourceModalOpen, setResourceModalOpen] = useState(false);
   const [topic, setTopic] = React.useState('');
@@ -51,55 +52,112 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
   const fetchResponse = async (topic, depth_level) => {
     try {
       if (topic && depth_level && learningStyle) {
-        const res = await fetch('/api/learningContent', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ topic, depth_level, learningStyle }),
-        });
-        const data = await res.json()
         const depthResponseData = {
           depth: depth_level,
           learningStyle: learningStyle,
-          text: data.text,
+          text: "",
         };
+
         setDepthResponse(prevDepthResponse => ({
           ...prevDepthResponse,
           [topic]: prevDepthResponse[topic]
             ? [...prevDepthResponse[topic], depthResponseData]
             : [depthResponseData],
         }));
-        updateSubStack(stackId || id, subStackId, topic, depthResponseData);
+
+        const url = `/api/learningContent?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}`;
+        const eventSource = new EventSource(url);
+
+        eventSource.onmessage = function (event) {
+          const data = JSON.parse(event.data);
+
+          if (data.token) {
+            // Handle token data here
+            setTokens((prevTokens) => [...prevTokens, data.token])
+          }
+
+          if (data.response) {
+            eventSource.close();
+            const newDepthResponseData = {
+              depth: depth_level,
+              learningStyle: learningStyle,
+              text: data?.response?.text,
+            };
+            setDepthResponse(prevDepthResponse => {
+              const updatedDepthResponse = { ...prevDepthResponse };
+              const topicResponses = updatedDepthResponse[topic];
+              topicResponses[topicResponses.length - 1] = newDepthResponseData;
+              return updatedDepthResponse;
+            });
+            setTokens([]);
+            updateSubStack(stackId || id, subStackId, topic, newDepthResponseData);
+          }
+        };
+        eventSource.onerror = function (error) {
+          console.error("Error calling OpenAI API:", error);
+          eventSource.close();
+        };
       }
       else {
-        const res = await fetch('/api/learningContent', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ topic }),
-        });
-        const data = await res.json()
         const responseData = {
           title: topic,
-          text: data.content,
-          prompts: data.question,
+          text: "",
+          prompts: "",
         }
         setResponses((prevResponses) => [...prevResponses, responseData]);
-        if (responses.length === 0) {
-          const { stackId, subStackId } = await saveStackHistory(responseData);
-          setStackId(stackId);
-          setSubStackId(subStackId);
-        } else {
-          const subStackId = await saveSubStack(stackId || id, responseData);
-          setSubStackId(subStackId)
-        }
+        const url = `/api/learningContent?topic=${encodeURIComponent(topic)}`;
+        const eventSource = new EventSource(url);
+        eventSource.onmessage = async function (event) {
+          const data = JSON.parse(event.data);
+          if (data.token) {
+            // Handle token data here
+            setTokens((prevTokens) => [...prevTokens, data.token])
+          }
+          if (data.response) {
+            eventSource.close();
+            console.log(data.response, "response data")
+            const responseData = {
+              title: topic,
+              text: data.response.content, // Assuming 'content' field in 'response'
+              prompts: data.response.question, // Assuming 'question' field in 'response'
+            }
+            setResponses((prevResponses) => {
+              const updatedResponses = [...prevResponses];
+              const index = updatedResponses.slice().reverse().findIndex(response => response.title === topic);
+              const realIndex = index >= 0 ? updatedResponses.length - 1 - index : index;
+
+              if (realIndex > -1) {
+                updatedResponses[realIndex] = {
+                  ...updatedResponses[realIndex],
+                  text: data.response.content,
+                  prompts: data.response.question,
+                };
+              }
+
+              return updatedResponses;
+            });
+            setTokens([])
+            if (responses.length === 0) {
+              const { stackId, subStackId } = await saveStackHistory(responseData);
+              setStackId(stackId);
+              setSubStackId(subStackId);
+            } else {
+              const subStackId = await saveSubStack(stackId || id, responseData);
+              setSubStackId(subStackId)
+            }
+          }
+        };
+        eventSource.onerror = function (error) {
+          console.error("Error calling OpenAI API:", error);
+          console.log(error, "error")
+          eventSource.close();
+        };
       }
     } catch (error) {
       console.error("Error calling OpenAI API:", error);
     }
   };
+
 
   const handleLearnButtonClick = () => {
     fetchResponse(inputText);
@@ -141,6 +199,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
             return (
               <div key={index} className={styles.response}>
                 <div className={styles.responseTitle}>{response.title}</div>
+
                 <div className={styles.responseText}>
                   {textLines?.map((line, idx) => (
                     <React.Fragment key={idx}>
@@ -151,6 +210,16 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
                     </React.Fragment>
                   ))}
                 </div>
+
+                {!response?.text &&
+                  tokens.map((token, index) => {
+                    if (token.endsWith('.\n\n') || token.endsWith(':\n\n')) {
+                      return <span key={index} className={styles.token}>{token.slice(0, -2)}<br /><br /></span>
+                    } else {
+                      return (<span key={index} className={styles.token}>{token}</span>)
+                    }
+                  })}
+
 
                 <div className={styles.depthContainer}>
                   {depthResponse[response?.title] && depthResponse[response?.title]?.map((responseDepth, index) => {
@@ -171,7 +240,20 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
                               </Typography>
                             </React.Fragment>
                           ))}
+
+
+                          {!responseDepth?.text &&
+                            tokens.map((token, index) => {
+                              if (token.endsWith('.\n\n') || token.endsWith(':\n\n')) {
+                                return <span key={index} className={styles.token}>{token.slice(0, -2)}<br /><br /></span>
+                              } else {
+                                return (<span key={index} className={styles.token}>{token}</span>)
+                              }
+                            })}
                         </div>
+
+
+
                       </React.Fragment>
                     )
                   })}
@@ -256,7 +338,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
         handleClose={handleResourceModalClose}
         modalType="resource"
       />
-    </div>
+    </div >
   );
 };
 

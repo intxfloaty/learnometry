@@ -8,7 +8,10 @@ import {
 } from "langchain/prompts";
 import { PromptTemplate } from "langchain/prompts";
 
-const chat = new ChatOpenAI({ temperature: 1 });
+const chat = new ChatOpenAI({
+  temperature: 1,
+  streaming: true,
+});
 
 const learningPrompt = ChatPromptTemplate.fromPromptMessages([
   SystemMessagePromptTemplate.fromTemplate(
@@ -29,6 +32,7 @@ const topicChain = new LLMChain({
 
 const questionLLM = new OpenAI({
   temperature: 0.5,
+  // streaming: true,
 })
 
 const questionTemplate = `You are a helpful prompt generator that generates question prompts .
@@ -47,7 +51,10 @@ const questionChain = new LLMChain({
   outputKey: "question",
 })
 
-const depthLevelLLM = new ChatOpenAI({ temperature: 0.5 });
+const depthLevelLLM = new ChatOpenAI({
+  temperature: 0.5,
+  streaming: true,
+});
 
 const depthLevelTemplate = (depth_level, learningStyle) => {
   let content = `You are a helpful tutor that helps students learn about any topic.
@@ -117,12 +124,6 @@ const depthLevelTemplate = (depth_level, learningStyle) => {
   return content;
 }
 
-// const depthLevelPrompt = ChatPromptTemplate.fromPromptMessages([
-//   SystemMessagePromptTemplate.fromTemplate(depthLevelTemplate(depth_level, learningStyle)),
-//   HumanMessagePromptTemplate.fromTemplate("{topic}", "{depth_level}"),
-// ]);
-
-
 const overallChain = new SequentialChain({
   chains: [topicChain, questionChain],
   inputVariables: ["topic"],
@@ -131,21 +132,34 @@ const overallChain = new SequentialChain({
 })
 
 export default async function handler(req, res) {
-  const { topic, depth_level, learningStyle } = req.body;
-  console.log(topic, depth_level, "topic")
+  const { topic, depth_level, learningStyle } = req.query;
 
+  // Set up headers for Server-Sent Events
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
 
   const depthLevelPrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(depthLevelTemplate(depth_level, learningStyle)),
     HumanMessagePromptTemplate.fromTemplate("{topic}", "{depth_level}"),
   ]);
 
-
   const depthLevelChain = new LLMChain({
     llm: depthLevelLLM,
     prompt: depthLevelPrompt,
     verbose: true,
   })
+
+  const handleLLMNewToken = (token) => {
+    process.stdout.write(token);
+    res.write(`data: ${JSON.stringify({ token })}\n\n`);
+  };
+
+  // const handleLLMError = (error) => {
+  //   res.write(`data: ${JSON.stringify({ error: error.message })}\n\n`);
+  // };
+
+
 
   try {
     let response;
@@ -154,16 +168,31 @@ export default async function handler(req, res) {
         topic: topic,
         depth_level: depth_level,
         learningStyle: learningStyle,
-      });
-      console.log(topic, depth_level, "topic");
+      }, [
+        {
+          handleLLMNewToken,
+        },
+      ]);
     } else {
       response = await overallChain.call({
         topic: topic,
-      });
+      }, [
+        {
+          handleLLMNewToken,
+          // handleLLMEnd,
+          // handleLLMError,
+        },
+      ]);
     }
-    res.status(200).json(response);
+
+    // Send the response
+    res.write(`data: ${JSON.stringify({ response })}\n\n`);
+
+    // End the connection
+    res.end();
   } catch (error) {
     console.error("Error calling OpenAI API:", error);
-    res.status(500).json({ error });
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error }));
   }
 }
