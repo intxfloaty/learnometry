@@ -160,17 +160,20 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
 
 
   const handleLearnButtonClick = () => {
+    setTokens([]);
     fetchResponse(inputText);
     setInputText('');
   };
 
   function handlePromptClick(prompt) {
+    setTokens([]);
     const cleanedPrompt = prompt.replace(/^\d+\.\s*/, '');
     fetchResponse(cleanedPrompt);
   }
 
 
   const handleSavePrefernces = () => {
+    setTokens([]);
     const depth_level = depth !== '' ? `Level_${depth}` : '';
     fetchResponse(topic, depth_level, learningStyle)
     handlePreferencesModalClose();
@@ -274,8 +277,8 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
                     Learning Preference
                   </button>
                   <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Explain Like I'm 5</button>
-                  <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Lesson Plan</button>
-                  <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Resources</button>
+                  {/* <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Lesson Plan</button> */}
+                  {/* <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Resources</button> */}
                 </div>
                 <div className={styles.promptSuggestions}>
                   <div className={styles.promptSuggestionsTitle}>Deep Dive:</div>
