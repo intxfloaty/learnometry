@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import {
   Dialog,
   DialogTitle,
@@ -16,6 +17,7 @@ import {
 
 const MyPlanModal = ({ open, handleClose }) => {
   const theme = useTheme();
+  const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const isExtraSmall = useMediaQuery('(max-width:400px)');
@@ -24,6 +26,26 @@ const MyPlanModal = ({ open, handleClose }) => {
   const gridSpacing = isMobile ? 2 : 3;
   const gridColumns = isMobile ? 12 : 6;
   const listItemStyle = isExtraSmall ? { fontSize: '12px', textAlign: 'center' } : { textAlign: 'center' };
+
+
+  const handleGetPlus = async () => {
+    try {
+      const response = await fetch('/api/upgradePlan', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ plan: 'plus' })
+      });
+      const data = await response.json();
+      const url = data.data.attributes.url;
+
+      // Use the router to navigate to the new page
+      router.push(url);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth={modalMaxWidth}>
@@ -60,7 +82,7 @@ const MyPlanModal = ({ open, handleClose }) => {
                   </List>
                 </Box>
                 <Box sx={{ mt: 'auto', display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Button variant="contained" color="primary" onClick={handleClose}
+                  <Button variant="contained" color="primary" onClick={handleGetPlus}
                     style={{ backgroundColor: 'black', color: 'white' }}>
                     Get Plus
                   </Button>
