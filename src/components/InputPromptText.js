@@ -189,7 +189,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
         }
       }
     }
-  }, [stackId]);
+  }, [stackId, responses, router]);
 
   return (
     <div className={styles.wrapper}>
@@ -276,9 +276,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
                   >
                     Learning Preference
                   </button>
-                  <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Explain Like I'm 5</button>
-                  {/* <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Lesson Plan</button> */}
-                  {/* <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Resources</button> */}
+                  <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Explain Like I am 5</button>
                 </div>
                 <div className={styles.promptSuggestions}>
                   <div className={styles.promptSuggestionsTitle}>Deep Dive:</div>

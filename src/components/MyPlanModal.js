@@ -28,7 +28,7 @@ const MyPlanModal = ({ open, handleClose }) => {
   const listItemStyle = isExtraSmall ? { fontSize: '12px', textAlign: 'center' } : { textAlign: 'center' };
 
 
-  const handleGetPlus = async () => {
+  const handleGetPro = async () => {
     try {
       const response = await fetch('/api/upgradePlan', {
         method: 'POST',
@@ -50,11 +50,11 @@ const MyPlanModal = ({ open, handleClose }) => {
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth={modalMaxWidth}>
       <Typography style={{ padding: "10px", fontSize: "16px", fontWeight: "bold" }}>
-        Currently, you are on the Learnometry Free plan. Upgrade to Learnometry Pro or Learnometry Plus to enjoy unlimited daily responses and gain access to additional features.
+        Currently, you are on the Learnometry Free plan. Upgrade to Learnometry Pro to enjoy unlimited daily responses and gain access to additional features.
       </Typography>
       <DialogContent>
         <Grid container spacing={gridSpacing}>
-          <Grid item xs={gridColumns}>
+          {/* <Grid item xs={gridColumns}>
             <Box sx={{ height: '100%' }}>
               <Paper elevation={1} sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="h5" align="center" gutterBottom
@@ -89,7 +89,7 @@ const MyPlanModal = ({ open, handleClose }) => {
                 </Box>
               </Paper>
             </Box>
-          </Grid>
+          </Grid> */}
           <Grid item xs={gridColumns}>
             <Box sx={{ height: '100%' }}>
               <Paper elevation={1} sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -124,7 +124,7 @@ const MyPlanModal = ({ open, handleClose }) => {
                   </List>
                 </Box>
                 <Box sx={{ mt: 'auto', display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Button variant="contained" color="primary" onClick={handleClose}
+                  <Button variant="contained" color="primary" onClick={handleGetPro}
                     style={{ backgroundColor: 'black', color: 'white' }}>
                     Get Pro
                   </Button>
