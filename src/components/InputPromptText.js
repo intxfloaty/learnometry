@@ -254,9 +254,6 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
                               }
                             })}
                         </div>
-
-
-
                       </React.Fragment>
                     )
                   })}
