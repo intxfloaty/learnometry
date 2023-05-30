@@ -1,15 +1,13 @@
+/* eslint-disable */
 const { onRequest } = require("firebase-functions/v2/https");
 require("dotenv").config();
-const cors = require('cors')({ origin: true });
-const logger = require("firebase-functions/logger");
+const cors = require("cors")({ origin: true });
 const { SequentialChain, LLMChain } = require("langchain/chains");
 const { ChatOpenAI } = require("langchain/chat_models/openai");
 const { OpenAI } = require("langchain/llms/openai");
-const {
-  SystemMessagePromptTemplate,
+const { SystemMessagePromptTemplate,
   HumanMessagePromptTemplate,
-  ChatPromptTemplate,
-} = require("langchain/prompts");
+  ChatPromptTemplate } = require("langchain/prompts");
 const { PromptTemplate } = require("langchain/prompts");
 
 

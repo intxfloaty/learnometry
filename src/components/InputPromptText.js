@@ -65,7 +65,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
             : [depthResponseData],
         }));
 
-        const url = `http://127.0.0.1:5001/learnometry-a4447/us-central1/learningContent?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}`;
+        const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}`;
         const eventSource = new EventSource(url);
 
         eventSource.onmessage = function (event) {
@@ -105,7 +105,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
           prompts: "",
         }
         setResponses((prevResponses) => [...prevResponses, responseData]);
-        const url = `http://127.0.0.1:5001/learnometry-a4447/us-central1/learningContent?topic=${encodeURIComponent(topic)}`;
+        const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}`;
         const eventSource = new EventSource(url);
         eventSource.onmessage = async function (event) {
           const data = JSON.parse(event.data);
