@@ -1,4 +1,6 @@
 const { onRequest } = require("firebase-functions/v2/https");
+require("dotenv").config();
+const cors = require('cors')({ origin: true });
 const logger = require("firebase-functions/logger");
 const { SequentialChain, LLMChain } = require("langchain/chains");
 const { ChatOpenAI } = require("langchain/chat_models/openai");
@@ -12,6 +14,7 @@ const { PromptTemplate } = require("langchain/prompts");
 
 
 const chat = new ChatOpenAI({
+  openAIApiKey: `${process.env.OPENAI_API_KEY}`,
   temperature: 1,
   streaming: true,
 });
@@ -34,6 +37,7 @@ const topicChain = new LLMChain({
 });
 
 const questionLLM = new OpenAI({
+  openAIApiKey: `${process.env.OPENAI_API_KEY}`,
   temperature: 0.5,
   // streaming: true,
 })
@@ -55,6 +59,7 @@ const questionChain = new LLMChain({
 })
 
 const depthLevelLLM = new ChatOpenAI({
+  openAIApiKey: `${process.env.OPENAI_API_KEY}`,
   temperature: 0.5,
   streaming: true,
 });
@@ -135,67 +140,69 @@ const overallChain = new SequentialChain({
 })
 
 exports.learningContent = onRequest(async (req, res) => {
+  cors(req, res, async () => {
 
-  const { topic, depth_level, learningStyle } = req.query;
+    const { topic, depth_level, learningStyle } = req.query;
 
-  // Set up headers for Server-Sent Events
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
+    // Set up headers for Server-Sent Events
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
 
-  const depthLevelPrompt = ChatPromptTemplate.fromPromptMessages([
-    SystemMessagePromptTemplate.fromTemplate(depthLevelTemplate(depth_level, learningStyle)),
-    HumanMessagePromptTemplate.fromTemplate("{topic}", "{depth_level}"),
-  ]);
+    const depthLevelPrompt = ChatPromptTemplate.fromPromptMessages([
+      SystemMessagePromptTemplate.fromTemplate(depthLevelTemplate(depth_level, learningStyle)),
+      HumanMessagePromptTemplate.fromTemplate("{topic}", "{depth_level}"),
+    ]);
 
-  const depthLevelChain = new LLMChain({
-    llm: depthLevelLLM,
-    prompt: depthLevelPrompt,
-    verbose: true,
-  })
+    const depthLevelChain = new LLMChain({
+      llm: depthLevelLLM,
+      prompt: depthLevelPrompt,
+      verbose: true,
+    })
 
-  const handleLLMNewToken = (token) => {
-    process.stdout.write(token);
-    res.write(`data: ${JSON.stringify({ token })}\n\n`);
-  };
+    const handleLLMNewToken = (token) => {
+      process.stdout.write(token);
+      res.write(`data: ${JSON.stringify({ token })}\n\n`);
+    };
 
-  // const handleLLMError = (error) => {
-  //   res.write(`data: ${JSON.stringify({ error: error.message })}\n\n`);
-  // };
+    // const handleLLMError = (error) => {
+    //   res.write(`data: ${JSON.stringify({ error: error.message })}\n\n`);
+    // };
 
-  try {
-    let response;
-    if (depth_level) {
-      response = await depthLevelChain.call({
-        topic: topic,
-        depth_level: depth_level,
-        learningStyle: learningStyle,
-      }, [
-        {
-          handleLLMNewToken,
-        },
-      ]);
-    } else {
-      response = await overallChain.call({
-        topic: topic,
-      }, [
-        {
-          handleLLMNewToken,
-          // handleLLMEnd,
-          // handleLLMError,
-        },
-      ]);
+    try {
+      let response;
+      if (depth_level) {
+        response = await depthLevelChain.call({
+          topic: topic,
+          depth_level: depth_level,
+          learningStyle: learningStyle,
+        }, [
+          {
+            handleLLMNewToken,
+          },
+        ]);
+      } else {
+        response = await overallChain.call({
+          topic: topic,
+        }, [
+          {
+            handleLLMNewToken,
+            // handleLLMEnd,
+            // handleLLMError,
+          },
+        ]);
+      }
+
+      // Send the response
+      res.write(`data: ${JSON.stringify({ response })}\n\n`);
+
+      // End the connection
+      res.end();
+    } catch (error) {
+      console.error("Error calling OpenAI API:", error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error }));
     }
-
-    // Send the response
-    res.write(`data: ${JSON.stringify({ response })}\n\n`);
-
-    // End the connection
-    res.end();
-  } catch (error) {
-    console.error("Error calling OpenAI API:", error);
-    res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error }));
-  }
+  });
 });
 

@@ -102,7 +102,7 @@ const MyPlanModal = ({ open, handleClose }) => {
                   Pro
                 </Typography>
                 <Typography variant="h6" style={{ fontWeight: "bold" }} gutterBottom>
-                  $20/month
+                  $15/month
                 </Typography>
                 <Box sx={{ flexGrow: 1 }}>
                   <List>
