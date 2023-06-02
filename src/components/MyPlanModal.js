@@ -30,7 +30,7 @@ const MyPlanModal = ({ open, handleClose }) => {
 
   const handleGetPro = async () => {
     try {
-      const response = await fetch('/api/upgradePlan', {
+      const response = await fetch('https://upgradeplan-h2i33bupla-uc.a.run.app', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
