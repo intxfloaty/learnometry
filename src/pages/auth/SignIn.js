@@ -12,7 +12,7 @@ const SignIn = () => {
   const [message, setMessage] = useState(null);
 
   const actionCodeSettings = {
-    url: `${process.env.NEXT_PUBLIC_APP_URL}`,
+    url: `https://learnometry-a4447.web.app`,
     handleCodeInApp: true,
   };
 
