@@ -14,7 +14,7 @@
     padding: 50px;
 }
 
-.stacksTitle{
+.stacksTitle {
     font-size: 2rem;
     font-weight: 600;
     margin-bottom: 20px;
@@ -23,7 +23,6 @@
 
 .stack {
     height: 75px;
-    line-height: 75px;
     color: #333;
     text-decoration: none;
     margin-bottom: 15px;
@@ -33,6 +32,9 @@
     width: 100%;
     min-width: 350px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -68,11 +70,31 @@
 
 @media screen and (max-width: 768px) {
     .stacksContainer {
-        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
     }
 
     .stack {
-        height: 50px;
-        line-height: 50px;
+        height: auto;
+        padding: 10px ;
+        min-width: 200px;
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 1024px) {
+    .stacksContainer {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .stack {
+        height: 60px;
+        min-width: 300px;
     }
 }
