@@ -21,6 +21,7 @@ function Stacks() {
         <Sidebar />
       </div>
       <div className={styles.stacksContainer}>
+        <h1 className={styles.stacksTitle}>Your Stacks</h1>
         {stacks.map((stack, index) => (
           <Link href={`/stacks/${stack.id}`} passHref key={index}>
             <div className={styles.stack}>
