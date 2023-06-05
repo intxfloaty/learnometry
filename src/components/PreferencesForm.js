@@ -9,12 +9,6 @@ import TextField from '@mui/material/TextField';
 
 
 const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle }) => {
-  // State for custom learning method
-  // const [customLearningMethod, setCustomLearningMethod] = React.useState('');
-
-  // const handleCustomLearningMethodChange = (event) => {
-  //   setCustomLearningMethod(event.target.value);
-  // };
 
   const handleDepthChange = (event, newValue) => {
     setDepth(newValue);
@@ -25,11 +19,11 @@ const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle }) =
   };
 
   const learningStylesDescriptions = {
-    textbook: "Adopts textbook-style language with well-structured sentences and rich vocabulary.",
-    layman: "Simplifies complex ideas with everyday language and relatable examples.",
-    storyTelling: "Utilizes narratives and anecdotes to make ideas engaging and memorable.",
-    socratic: "Stimulates curiosity through thought-provoking questions and self-directed learning.",
-    analogical: "Fosters deep understanding by comparing similarities between concepts.",
+    Textbook: "adopts textbook-style language with well-structured sentences and rich vocabulary.",
+    Layman: "simplifies complex ideas with everyday language and relatable examples.",
+    StoryTelling: "utilizes narratives and anecdotes to make ideas engaging and memorable.",
+    Socratic: "stimulates curiosity through thought-provoking questions and self-directed learning.",
+    Analogical: "fosters deep understanding by comparing similarities between concepts.",
   };
 
 
@@ -61,6 +55,7 @@ const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle }) =
         >
           {Object.entries(learningStylesDescriptions).map(([style, description]) => (
             <FormControlLabel
+            sx={{marginBottom: "25px"}}
               key={style}
               value={style}
               control={<Radio />}
@@ -69,18 +64,6 @@ const PreferencesForm = ({ depth, setDepth, learningStyle, setLearningStyle }) =
           ))}
         </RadioGroup>
       </div>
-      {/* <div className={styles.preferenceSection}>
-        <h4 style={{ marginBottom: "20px" }}>Custom Learning Method</h4>
-        <TextField
-          label="Describe your preferred learning method"
-          multiline
-          rows={4}
-          value={customLearningMethod}
-          onChange={handleCustomLearningMethodChange}
-          variant="outlined"
-          fullWidth
-        />
-      </div> */}
     </div>
   );
 };
