@@ -10,6 +10,12 @@ const { SystemMessagePromptTemplate,
   ChatPromptTemplate } = require("langchain/prompts");
 const { PromptTemplate } = require("langchain/prompts");
 
+const crypto = require('crypto');
+const admin = require('firebase-admin');
+admin.initializeApp();
+
+const db = admin.firestore();
+
 
 const chat = new ChatOpenAI({
   openAIApiKey: `${process.env.OPENAI_API_KEY}`,
@@ -273,3 +279,60 @@ exports.upgradePlan = onRequest(async (req, res) => {
 
   });
 });
+
+
+const saveWebhookData = async (data) => {
+  try {
+    const docRef = await db.collection('webhookData').add({
+      data: data,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    });
+    console.log("Document written with ID: ", docRef.id);
+  } catch (error) {
+    console.error("Error adding document: ", error);
+  }
+}
+
+
+exports.webhook = onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      if (req.method !== 'POST') {
+        res.status(405).send('Method Not Allowed');
+        return;
+      }
+
+      const rawBody = req.rawBody;
+
+      if (!rawBody) {
+        res.status(400).send('Bad Request');
+        return;
+      }
+
+      const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
+      const hmac = crypto.createHmac('sha256', secret);
+      const digest = Buffer.from(hmac.update(rawBody.toString()).digest('hex'), 'hex');
+      
+      if (!req.headers['x-signature']) {
+        res.status(401).send('Signature missing');
+        return;
+      }
+
+      const signature = Buffer.from(req.headers['x-signature'], 'hex');
+
+      if (!crypto.timingSafeEqual(digest, signature)) {
+        res.status(401).send('Invalid signature');
+        return;
+      }
+
+      const data = JSON.parse(rawBody)
+      console.log(data)
+      await saveWebhookData(data)
+
+      res.status(200).send('OK');
+    } catch (error) {
+      console.error('Unexpected error occurred:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+})

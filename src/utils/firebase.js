@@ -146,3 +146,20 @@ export const fetchSubStacks = async (stackId) => {
     console.error("Error fetching sub-stacks: ", error);
   }
 }
+
+
+// store webhook data in firebase
+export const saveWebhookData = async (data) => {
+  const webhookData = collection(db, "webhookData");
+
+  try {
+    const docRef = await addDoc(webhookData, {
+      data: data,
+      timestamp: new Date(),
+    });
+
+    console.log("Document written with ID: ", docRef.id);
+  } catch (error) {
+    console.error("Error adding document: ", error);
+  }
+}

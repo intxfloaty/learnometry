@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import {saveWebhookData} from '../../utils/firebase'
 
 export async function POST(request, response) {
 
@@ -14,6 +15,8 @@ export async function POST(request, response) {
     }
 
     const data = JSON.parse(rawBody)
+    console.log(data)
+    await saveWebhookData(data)
 
     return new Response('OK')
 }
