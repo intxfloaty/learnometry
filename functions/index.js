@@ -1,4 +1,5 @@
 /* eslint-disable */
+const functions = require("firebase-functions");
 const { onRequest } = require("firebase-functions/v2/https");
 require("dotenv").config();
 const cors = require("cors")({ origin: true });
@@ -15,6 +16,23 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 
 const db = admin.firestore();
+
+exports.createUserRecord = functions.auth.user().onCreate((user) => {
+  const docRef = admin.firestore().collection('users').doc(user.uid);
+  
+  return docRef.set({
+    email: user.email,
+    uid: user.uid,
+    timestamp: new Date(),
+  })
+  .then(() => {
+    console.log('User Data Successfully Written for: ', user.uid);
+    return null;
+  })
+  .catch((error) => {
+    console.error('Error writing user document:', error);
+  });
+});
 
 
 const chat = new ChatOpenAI({
