@@ -232,6 +232,7 @@ exports.learningContent = onRequest(async (req, res) => {
 exports.upgradePlan = onRequest(async (req, res) => {
   cors(req, res, async () => {
     const apiKey = process.env.NEXT_PUBLIC_LEMONSQUEEZY_API_KEY;
+    const userId = req.body.userId;
 
 
     try {
@@ -269,6 +270,13 @@ exports.upgradePlan = onRequest(async (req, res) => {
           body: JSON.stringify({
             "data": {
               "type": "checkouts",
+              "attributes": {
+                "checkout_data": {
+                  "custom": {
+                    "user_id": userId
+                  }
+                }
+              },
               "relationships": {
                 "store": {
                   "data": {
@@ -299,9 +307,12 @@ exports.upgradePlan = onRequest(async (req, res) => {
 });
 
 
-const saveWebhookData = async (data) => {
+const saveWebhookData = async (userId, data) => {
   try {
-    const docRef = await db.collection('webhookData').add({
+    const docRef = await db.collection('users')
+    .doc(userId)
+    .collection('webhookData')
+    .add({
       data: data,
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
     });
@@ -345,7 +356,9 @@ exports.webhook = onRequest((req, res) => {
 
       const data = JSON.parse(rawBody)
       console.log(data)
-      await saveWebhookData(data)
+      console.log(data.meta.custom_data.user_id)
+      const userId = data.meta.custom_data.user_id;
+      await saveWebhookData(userId, data)
 
       res.status(200).send('OK');
     } catch (error) {

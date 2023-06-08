@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, use} from 'react';
 import { useRouter } from 'next/router';
 import {
   Dialog,
@@ -14,8 +14,11 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
+import { auth } from '@/utils/firebase';
 
 const MyPlanModal = ({ open, handleClose }) => {
+  const [userId, setUserId] = useState('');
+  console.log(userId)
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -27,6 +30,11 @@ const MyPlanModal = ({ open, handleClose }) => {
   const gridColumns = isMobile ? 12 : 6;
   const listItemStyle = isExtraSmall ? { fontSize: '12px', textAlign: 'center' } : { textAlign: 'center' };
 
+useEffect(() => {
+  if (auth.currentUser) {
+    setUserId(auth.currentUser.uid);
+  }
+}, []);
 
   const handleGetPro = async () => {
     try {
@@ -35,7 +43,7 @@ const MyPlanModal = ({ open, handleClose }) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ plan: 'plus' })
+        body: JSON.stringify({ plan: 'plus', userId: userId })
       });
       const data = await response.json();
       const url = data.data.attributes.url;
