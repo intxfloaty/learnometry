@@ -19,19 +19,19 @@ const db = admin.firestore();
 
 exports.createUserRecord = functions.auth.user().onCreate((user) => {
   const docRef = admin.firestore().collection('users').doc(user.uid);
-  
+
   return docRef.set({
     email: user.email,
     uid: user.uid,
     timestamp: new Date(),
   })
-  .then(() => {
-    console.log('User Data Successfully Written for: ', user.uid);
-    return null;
-  })
-  .catch((error) => {
-    console.error('Error writing user document:', error);
-  });
+    .then(() => {
+      console.log('User Data Successfully Written for: ', user.uid);
+      return null;
+    })
+    .catch((error) => {
+      console.error('Error writing user document:', error);
+    });
 });
 
 
@@ -307,28 +307,30 @@ exports.upgradePlan = onRequest(async (req, res) => {
 });
 
 
-const saveWebhookData = async (userId, data) => {
+const saveWebhookData = async (userId, docId, data) => {
   try {
     const docRef = await db.collection('users')
-    .doc(userId)
-    .collection('webhookData')
-    .add({
-      data: data,
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
-    });
-    console.log("Document written with ID: ", docRef.id);
+      .doc(userId)
+      .collection('webhookData')
+      .doc(docId)
+      .set({
+        data: data,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      }, { merge: true });  // Merge option prevents overwriting of other fields
+
+    console.log("Document written/updated with ID: ", docId);
   } catch (error) {
-    console.error("Error adding document: ", error);
+    console.error("Error adding or updating document: ", error);
   }
 }
 
 const saveSubscriptionPaymentSuccess = async (data) => {
   try {
     const docRef = await db.collection('subscriptionPayment')
-    .add({
-      data: data,
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),  
-    });
+      .add({
+        data: data,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      });
     console.log("Document written with ID: ", docRef.id);
   } catch (error) {
     console.error("Error adding document: ", error);
@@ -355,7 +357,7 @@ exports.webhook = onRequest((req, res) => {
       const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
       const hmac = crypto.createHmac('sha256', secret);
       const digest = Buffer.from(hmac.update(rawBody.toString()).digest('hex'), 'hex');
-      
+
       if (!req.headers['x-signature']) {
         res.status(401).send('Signature missing');
         return;
@@ -372,8 +374,10 @@ exports.webhook = onRequest((req, res) => {
       if (data.meta.event_name === 'subscription_payment_success') {
         await saveSubscriptionPaymentSuccess(data)
       } else {
+        const subscriptionData = data.data.attributes
         const userId = data.meta.custom_data.user_id;
-        await saveWebhookData(userId, data);
+        const docId = data.meta.event_name; // Use the event name as the document id
+        await saveWebhookData(userId, docId, subscriptionData);
       }
 
       res.status(200).send('OK');
