@@ -322,6 +322,20 @@ const saveWebhookData = async (userId, data) => {
   }
 }
 
+const saveSubscriptionPaymentSuccess = async (data) => {
+  try {
+    const docRef = await db.collection('subscriptionPayment')
+    .add({
+      data: data,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),  
+    });
+    console.log("Document written with ID: ", docRef.id);
+  } catch (error) {
+    console.error("Error adding document: ", error);
+  }
+}
+
+
 
 exports.webhook = onRequest((req, res) => {
   cors(req, res, async () => {
@@ -355,10 +369,12 @@ exports.webhook = onRequest((req, res) => {
       }
 
       const data = JSON.parse(rawBody)
-      console.log(data)
-      console.log(data.meta.custom_data.user_id)
-      const userId = data.meta.custom_data.user_id;
-      await saveWebhookData(userId, data)
+      if (data.meta.event_name === 'subscription_payment_success') {
+        await saveSubscriptionPaymentSuccess(data)
+      } else {
+        const userId = data.meta.custom_data.user_id;
+        await saveWebhookData(userId, data);
+      }
 
       res.status(200).send('OK');
     } catch (error) {
