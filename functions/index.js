@@ -23,6 +23,8 @@ exports.createUserRecord = functions.auth.user().onCreate((user) => {
   return docRef.set({
     email: user.email,
     uid: user.uid,
+    responseCount: 3, // assuming the user has 10 responses initially
+    subscriber: false, // assuming the user is not a subscriber initially
     timestamp: new Date(),
   })
     .then(() => {
@@ -164,7 +166,34 @@ const overallChain = new SequentialChain({
 exports.learningContent = onRequest(async (req, res) => {
   cors(req, res, async () => {
 
-    const { topic, depth_level, learningStyle } = req.query;
+    const { topic, depth_level, learningStyle, uid } = req.query;
+
+
+    const userDocRef = admin.firestore().collection('users').doc(uid);
+
+    // Fetch user data
+    const userDoc = await userDocRef.get();
+    if (!userDoc.exists) {
+      console.error('User not found');
+      res.status(404).send('User not found');
+      return;
+    }
+
+    const userData = userDoc.data();
+
+    // If user is not a subscriber and responseCount is 0, deny access
+    if (!userData.subscriber && userData.responseCount <= 0) {
+      console.error('No responses left');
+      res.status(403).send('No responses left');
+      return;
+    }
+
+    // If user is not a subscriber, decrement responseCount
+    if (!userData.subscriber) {
+      await userDocRef.update({
+        responseCount: admin.firestore.FieldValue.increment(-1),
+      });
+    }
 
     // Set up headers for Server-Sent Events
     res.setHeader('Content-Type', 'text/event-stream');
