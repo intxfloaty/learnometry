@@ -1,4 +1,4 @@
-import React, {useState, useEffect, use} from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/router';
 import {
   Dialog,
@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { auth } from '@/utils/firebase';
 
-const MyPlanModal = ({ open, handleClose }) => {
+const MyPlanModal = ({ open, handleClose, modalMessage }) => {
   const [userId, setUserId] = useState('');
   console.log(userId)
   const theme = useTheme();
@@ -30,11 +30,11 @@ const MyPlanModal = ({ open, handleClose }) => {
   const gridColumns = isMobile ? 12 : 6;
   const listItemStyle = isExtraSmall ? { fontSize: '12px', textAlign: 'center' } : { textAlign: 'center' };
 
-useEffect(() => {
-  if (auth.currentUser) {
-    setUserId(auth.currentUser.uid);
-  }
-}, []);
+  useEffect(() => {
+    if (auth.currentUser) {
+      setUserId(auth.currentUser.uid);
+    }
+  }, []);
 
   const handleGetPro = async () => {
     try {
@@ -57,9 +57,13 @@ useEffect(() => {
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth={modalMaxWidth}>
-      <Typography style={{ padding: "10px", fontSize: "16px", fontWeight: "bold" }}>
-        Currently, you are on the Learnometry Free plan. Upgrade your plan to enjoy unlimited daily responses and gain access to additional features.
-      </Typography>
+      {(modalMessage) ?
+        <Typography style={{ padding: "10px", fontSize: "16px", fontWeight: "bold" }}>
+          {modalMessage}
+        </Typography> :
+        <Typography style={{ padding: "10px", fontSize: "16px", fontWeight: "bold" }}>
+          Currently, you are on the Learnometry Free plan. Upgrade your plan to enjoy unlimited daily responses and gain access to additional features.
+        </Typography>}
       <DialogContent>
         <Grid container spacing={gridSpacing}>
           <Grid item xs={gridColumns}>

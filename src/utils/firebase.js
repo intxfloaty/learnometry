@@ -194,3 +194,26 @@ export const fetchSubStacks = async (stackId) => {
   }
 }
 
+// to check if user is a non-subscriber and responseCount is not zero
+export const checkUserResponseCount = async () => {
+  if (auth.currentUser) {
+    const userId = auth.currentUser.uid;
+    const users = collection(db, "users");
+    const userRef = doc(users, userId);
+
+    try {
+      const docSnapshot = await getDoc(userRef);
+      if (!docSnapshot.exists()) {
+        console.error('No such document exists!');
+        return;
+      }
+      let currentData = docSnapshot.data();
+      return {responseCount: currentData.responseCount, subscriber: currentData.subscriber};
+    } catch (error) {
+      console.error("Error fetching user response count: ", error);
+    }
+  } else {
+    console.log("No user is signed in.");
+  }
+}
+

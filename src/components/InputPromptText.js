@@ -9,9 +9,10 @@ import Button from '@mui/material/Button';
 import PreferencesForm from './PreferencesForm';
 import { Typography } from '@mui/material';
 import ComingSoonModal from './ComingSoonModal';
+import MyPlanModal from './MyPlanModal';
 import { saveStackHistory, saveSubStack, updateSubStack } from '@/utils/firebase';
 import { useRouter } from 'next/router'
-import { auth } from '@/utils/firebase'
+import { auth, checkUserResponseCount } from '@/utils/firebase'
 
 
 const InputPromptText = ({ responses, setResponses, depthResponse, setDepthResponse, id }) => {
@@ -20,6 +21,8 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
   const [tokens, setTokens] = useState([])
 
   console.log(uid, 'uid')
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('You have exhausted your free 50 responses. Please upgrade to continue learning.')
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [resourceModalOpen, setResourceModalOpen] = useState(false);
   const [topic, setTopic] = React.useState('');
@@ -47,11 +50,27 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
     setResourceModalOpen(false);
   };
 
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
   const handleInputChange = (event) => {
     setInputText(event.target.value);
   };
 
   const fetchResponse = async (topic, depth_level) => {
+
+    const userStatus = await checkUserResponseCount()
+
+    if (!userStatus.subscriber && userStatus.responseCount <= 0) {
+      handleModalOpen()
+      return
+    }
+
     try {
       if (topic && depth_level && learningStyle) {
         const depthResponseData = {
@@ -344,6 +363,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
         handleClose={handleResourceModalClose}
         modalType="resource"
       />
+      <MyPlanModal open={modalOpen} handleClose={handleModalClose} modalMessage = {modalMessage}/>
     </div >
   );
 };
