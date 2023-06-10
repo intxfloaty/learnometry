@@ -379,20 +379,6 @@ const saveWebhookData = async (userId, docId, data) => {
   }
 }
 
-const saveSubscriptionPaymentSuccess = async (data) => {
-  try {
-    const docRef = await db.collection('subscriptionPayment')
-      .add({
-        data: data,
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      });
-    console.log("Document written with ID: ", docRef.id);
-  } catch (error) {
-    console.error("Error adding document: ", error);
-  }
-}
-
-
 
 exports.webhook = onRequest((req, res) => {
   cors(req, res, async () => {
@@ -426,8 +412,17 @@ exports.webhook = onRequest((req, res) => {
       }
 
       const data = JSON.parse(rawBody)
-      if (data.meta.event_name === 'subscription_payment_success') {
-        await saveSubscriptionPaymentSuccess(data)
+      if (data.meta.event_name === 'subscription_updated') {
+        const subscriptionData = data.data.attributes
+        const subscriptionStatus = subscriptionData.status;
+        const userId = data.meta.custom_data.user_id;
+        const docId = data.meta.event_name; // Use the event name as the document id
+        if (subscriptionStatus !== 'expired' && subscriptionStatus !== 'unpaid') {
+          await db.collection('users').doc(userId).update({
+            subscriber: true,
+          });
+        }
+        await saveWebhookData(userId, docId, subscriptionData);
       } else {
         const subscriptionData = data.data.attributes
         const userId = data.meta.custom_data.user_id;
