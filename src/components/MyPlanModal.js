@@ -43,6 +43,25 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
         headers: {
           'Content-Type': 'application/json'
         },
+        body: JSON.stringify({ plan: 'pro', userId: userId })
+      });
+      const data = await response.json();
+      const url = data.data.attributes.url;
+
+      // Use the router to navigate to the new page
+      router.push(url);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleGetPlus = async () => {
+    try {
+      const response = await fetch('https://upgradeplan-h2i33bupla-uc.a.run.app', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ plan: 'plus', userId: userId })
       });
       const data = await response.json();
@@ -94,7 +113,7 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
                   </List>
                 </Box>
                 <Box sx={{ mt: 'auto', display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Button variant="contained" color="primary" onClick={handleGetPro}
+                  <Button variant="contained" color="primary" onClick={handleGetPlus}
                     style={{ backgroundColor: 'black', color: 'white' }}>
                     Get Plus
                   </Button>

@@ -262,28 +262,54 @@ exports.upgradePlan = onRequest(async (req, res) => {
   cors(req, res, async () => {
     const apiKey = process.env.NEXT_PUBLIC_LEMONSQUEEZY_API_KEY;
     const userId = req.body.userId;
-
+    const plan = req.body.plan;
+    let variantId;
 
     try {
-      // Fetch variant id
-      const variantsResponse = await fetch(
-        `https://api.lemonsqueezy.com/v1/variants`,
-        {
-          method: "GET",
-          headers: {
-            'Accept': 'application/vnd.api+json',
-            "Content-Type": "application/vnd.api+json",
-            "Authorization": `Bearer ${apiKey}`,
+
+      if (plan === 'plus') {
+        // Fetch variant id
+        const variantsResponse = await fetch(
+          `https://api.lemonsqueezy.com/v1/variants?filter[product_id]=77354`,
+          {
+            method: "GET",
+            headers: {
+              'Accept': 'application/vnd.api+json',
+              "Content-Type": "application/vnd.api+json",
+              "Authorization": `Bearer ${apiKey}`,
+            }
           }
+        );
+
+        const variantsData = await variantsResponse.json();
+        variantId = variantsData.data[0]?.id;  // Assuming the data has this structure. Update if necessary.
+
+        if (!variantId) {
+          res.status(400).json({ error: 'Variant ID not found' });
+          return;
         }
-      );
 
-      const variantsData = await variantsResponse.json();
-      const variantId = variantsData.data[0]?.id;  // Assuming the data has this structure. Update if necessary.
+      } else {
+        // Fetch variant id
+        const variantsResponse = await fetch(
+          `https://api.lemonsqueezy.com/v1/variants?filter[product_id]=81783`,
+          {
+            method: "GET",
+            headers: {
+              'Accept': 'application/vnd.api+json',
+              "Content-Type": "application/vnd.api+json",
+              "Authorization": `Bearer ${apiKey}`,
+            }
+          }
+        );
 
-      if (!variantId) {
-        res.status(400).json({ error: 'Variant ID not found' });
-        return;
+        const variantsData = await variantsResponse.json();
+        variantId = variantsData.data[0]?.id;  // Assuming the data has this structure. Update if necessary.
+
+        if (!variantId) {
+          res.status(400).json({ error: 'Variant ID not found' });
+          return;
+        }
       }
 
       // Create checkout with the obtained variant id
