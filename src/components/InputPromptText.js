@@ -11,13 +11,15 @@ import { Typography } from '@mui/material';
 import ComingSoonModal from './ComingSoonModal';
 import { saveStackHistory, saveSubStack, updateSubStack } from '@/utils/firebase';
 import { useRouter } from 'next/router'
+import { auth } from '@/utils/firebase'
 
 
 const InputPromptText = ({ responses, setResponses, depthResponse, setDepthResponse, id }) => {
+  const [uid, setUid] = useState('');
   const [inputText, setInputText] = useState('');
   const [tokens, setTokens] = useState([])
 
-  console.log(tokens, 'tokens')
+  console.log(uid, 'uid')
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [resourceModalOpen, setResourceModalOpen] = useState(false);
   const [topic, setTopic] = React.useState('');
@@ -65,7 +67,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
             : [depthResponseData],
         }));
 
-        const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}`;
+        const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}&uid=${encodeURIComponent(uid)}`;
         const eventSource = new EventSource(url);
 
         eventSource.onmessage = function (event) {
@@ -105,7 +107,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
           prompts: "",
         }
         setResponses((prevResponses) => [...prevResponses, responseData]);
-        const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}`;
+        const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&uid=${encodeURIComponent(uid)}`;
         const eventSource = new EventSource(url);
         eventSource.onmessage = async function (event) {
           const data = JSON.parse(event.data);
@@ -190,6 +192,12 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
       }
     }
   }, [stackId, responses, router]);
+
+  useEffect(() => {
+    if (auth.currentUser) {
+      setUid(auth.currentUser.uid);
+    }
+  }, []);
 
   return (
     <div className={styles.wrapper}>
