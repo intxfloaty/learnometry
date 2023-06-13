@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { auth } from '@/utils/firebase';
 
-const MyPlanModal = ({ open, handleClose, modalMessage }) => {
+const MyPlanModal = ({ open, handleClose, modalMessage, subscriber }) => {
   const [userId, setUserId] = useState('');
   console.log(userId)
   const theme = useTheme();
@@ -72,6 +72,18 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  if (subscriber) {
+    return (
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth={modalMaxWidth}>
+        <DialogTitle>
+          <Typography style={{ padding: "10px", fontSize: "16px", fontWeight: "bold" }} align="center">
+            You are already a subscriber!
+          </Typography>
+        </DialogTitle>
+      </Dialog>
+    )
   }
 
   return (

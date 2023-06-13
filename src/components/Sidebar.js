@@ -16,7 +16,7 @@ import { auth } from '../utils/firebase';
 import { useRouter } from 'next/router';
 
 
-const Sidebar = () => {
+const Sidebar = ({ subscriber }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [progressReportModalOpen, setProgressReportModalOpen] = useState(false);
@@ -158,7 +158,7 @@ const Sidebar = () => {
       >
         {drawer}
       </Drawer>
-      <MyPlanModal open={modalOpen} handleClose={handleModalClose} />
+      <MyPlanModal open={modalOpen} handleClose={handleModalClose} subscriber={subscriber} />
       <ComingSoonModal
         open={progressReportModalOpen}
         handleClose={handleProgressReportModalClose}
