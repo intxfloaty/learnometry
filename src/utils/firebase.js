@@ -20,10 +20,7 @@ export const auth = getAuth(app);
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
-export const saveStackHistory = async (stack) => {
-  // Check if user is signed in
-  if (auth.currentUser) {
-    const userId = auth.currentUser.uid;
+export const saveStackHistory = async (userId, stack) => {
     const users = collection(db, "users");
     const userRef = doc(users, userId);
     const myStack = collection(userRef, "myStack");
@@ -59,17 +56,12 @@ export const saveStackHistory = async (stack) => {
     } catch (error) {
       console.error("Error adding document: ", error);
     }
-  } else {
-    console.log("No user is signed in.");
-  }
 }
 
 
 
-export const saveSubStack = async (stackId, subStack) => {
-  // Check if user is signed in
-  if (auth.currentUser) {
-    const userId = auth.currentUser.uid;
+export const saveSubStack = async (userId, stackId, subStack) => {
+ 
     const users = collection(db, "users");
     const userRef = doc(users, userId);
     const myStackCollection = collection(userRef, "myStack");
@@ -96,17 +88,12 @@ export const saveSubStack = async (stackId, subStack) => {
     } catch (error) {
       console.error("Error adding sub-stack document: ", error);
     }
-  } else {
-    console.log("No user is signed in or the passed userId doesn't match with the current user.");
-  }
 }
 
 
 
-export const updateSubStack = async (stackId, subStackId, topic, depthResponseData) => {
-  // Check if user is signed in
-  if (auth.currentUser) {
-    const userId = auth.currentUser.uid;
+export const updateSubStack = async (userId, stackId, subStackId, topic, depthResponseData) => {
+  
     const users = collection(db, "users");
     const userRef = doc(users, userId);
     const myStackCollection = collection(userRef, "myStack");
@@ -137,9 +124,6 @@ export const updateSubStack = async (stackId, subStackId, topic, depthResponseDa
     } catch (error) {
       console.error("Error updating sub-stack document: ", error);
     }
-  } else {
-    console.log("No user is signed in or the passed userId doesn't match with the current user.");
-  }
 }
 
 

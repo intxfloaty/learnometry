@@ -111,7 +111,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
               return updatedDepthResponse;
             });
             setTokens([]);
-            updateSubStack(stackId || id, subStackId, topic, newDepthResponseData);
+            updateSubStack(uid, stackId || id, subStackId, topic, newDepthResponseData);
           }
         };
         eventSource.onerror = function (error) {
@@ -159,11 +159,11 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
             });
             setTokens([])
             if (responses.length === 0) {
-              const { stackId, subStackId } = await saveStackHistory(responseData);
+              const { stackId, subStackId } = await saveStackHistory(uid, responseData);
               setStackId(stackId);
               setSubStackId(subStackId);
             } else {
-              const subStackId = await saveSubStack(stackId || id, responseData);
+              const subStackId = await saveSubStack(uid, stackId || id, responseData);
               setSubStackId(subStackId)
             }
           }
@@ -216,7 +216,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
     if (auth.currentUser) {
       setUid(auth.currentUser.uid);
     }
-  }, []);
+  }, [auth.currentUser]);
 
   return (
     <div className={styles.wrapper}>
@@ -363,7 +363,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
         handleClose={handleResourceModalClose}
         modalType="resource"
       />
-      <MyPlanModal open={modalOpen} handleClose={handleModalClose} modalMessage = {modalMessage}/>
+      <MyPlanModal open={modalOpen} handleClose={handleModalClose} modalMessage={modalMessage} />
     </div >
   );
 };
