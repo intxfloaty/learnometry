@@ -13,12 +13,24 @@ import MyPlanModal from './MyPlanModal';
 import ComingSoonModal from './ComingSoonModal';
 import { signOut } from 'firebase/auth';
 import { auth } from '../utils/firebase';
+import { useRouter } from 'next/router';
 
 
 const Sidebar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [progressReportModalOpen, setProgressReportModalOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        router.push('/'); // Navigate to the home page.
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
 
   const drawerWidth = 260;
@@ -101,11 +113,7 @@ const Sidebar = () => {
         </ListItemButton>
       </a>
 
-      <ListItemButton onClick={() => signOut(auth).then(() => {
-        // Sign-out successful.
-      }).catch((error) => {
-        // An error happened.
-      })}>
+      <ListItemButton onClick={handleLogout}>
         <IconButton >
           <LogoutIcon color='primary' />
         </IconButton>
