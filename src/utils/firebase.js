@@ -201,3 +201,27 @@ export const checkUserResponseCount = async () => {
   }
 }
 
+// fetch product name
+export const fetchProductName = async () => {
+  if (auth.currentUser) {
+    const userId = auth.currentUser.uid;
+    const users = collection(db, "users");
+    const userRef = doc(users, userId);
+    const webhookDataCollection = collection(userRef, "webhookData");
+    const webhookDataRef = doc(webhookDataCollection, "subscription_updated");
+
+    try {
+      const docSnapshot = await getDoc(webhookDataRef);
+      if (!docSnapshot.exists()) {
+        console.error('No such document exists!');
+        return;
+      }
+      let currentData = docSnapshot.data();
+      return currentData.data.product_name;
+    } catch (error) {
+      console.error("Error fetching product name: ", error);
+    }
+  } else {
+    console.log("No user is signed in.");
+  }
+}
