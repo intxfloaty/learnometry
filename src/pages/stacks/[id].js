@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react'
 import styles from '@/styles/Home.module.css'
 import Sidebar from '@/components/Sidebar'
 import InputPromptText from '@/components/InputPromptText'
-import { fetchSubStacks } from '@/utils/firebase'
+import { auth, fetchSubStacks } from '@/utils/firebase'
 
 const StackPage = () => {
   const router = useRouter()
   const { id } = router.query
+  const userId = auth.currentUser.uid;
   const [subId, setSubId] = useState(null); // [id].js
   const [stack, setStack] = useState(null);
   const [responses, setResponses] = useState([]);
@@ -19,12 +20,12 @@ const StackPage = () => {
   useEffect(() => {
     if (id) { // to avoid running on initial render
       const fetchData = async () => {
-        const fetchedStack = await fetchSubStacks(id)
+        const fetchedStack = await fetchSubStacks(userId, id)
         setStack(fetchedStack);
       }
       fetchData()
     }
-  }, [id]);
+  }, [userId, id]);
 
   useEffect(() => {
     if (stack) {

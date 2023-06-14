@@ -21,160 +21,148 @@ export const auth = getAuth(app);
 const db = getFirestore(app);
 
 export const saveStackHistory = async (userId, stack) => {
-    const users = collection(db, "users");
-    const userRef = doc(users, userId);
-    const myStack = collection(userRef, "myStack");
+  const users = collection(db, "users");
+  const userRef = doc(users, userId);
+  const myStack = collection(userRef, "myStack");
 
-    try {
-      const docRef = await addDoc(myStack, {
-        stackName: stack.title,
-        timestamp: new Date(),
-      });
+  try {
+    const docRef = await addDoc(myStack, {
+      stackName: stack.title,
+      timestamp: new Date(),
+    });
 
-      console.log("Document written with ID: ", docRef.id);
+    console.log("Document written with ID: ", docRef.id);
 
-      const subStacks = collection(docRef, "subStacks");
+    const subStacks = collection(docRef, "subStacks");
 
-      // Add the document first to get the ID
-      const stackContentRef = await addDoc(subStacks, {
-        stack: { ...stack, id: '' },  // Temporary placeholder for ID
-        timestamp: new Date(),
-      });
+    // Add the document first to get the ID
+    const stackContentRef = await addDoc(subStacks, {
+      stack: { ...stack, id: '' },  // Temporary placeholder for ID
+      timestamp: new Date(),
+    });
 
-      console.log("Document written with ID: ", stackContentRef.id);
+    console.log("Document written with ID: ", stackContentRef.id);
 
-      // Update the 'stack' field in the document with its own ID
-      await updateDoc(stackContentRef, {
-        'stack.id': stackContentRef.id,  // Update the id inside the stack object
-      });
+    // Update the 'stack' field in the document with its own ID
+    await updateDoc(stackContentRef, {
+      'stack.id': stackContentRef.id,  // Update the id inside the stack object
+    });
 
-      console.log("Sub-stack document updated with its own ID inside the stack object");
+    console.log("Sub-stack document updated with its own ID inside the stack object");
 
-      // Return the Id's for later use
-      return { stackId: docRef.id, subStackId: stackContentRef.id };
+    // Return the Id's for later use
+    return { stackId: docRef.id, subStackId: stackContentRef.id };
 
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
+  } catch (error) {
+    console.error("Error adding document: ", error);
+  }
 }
 
 
 
 export const saveSubStack = async (userId, stackId, subStack) => {
- 
-    const users = collection(db, "users");
-    const userRef = doc(users, userId);
-    const myStackCollection = collection(userRef, "myStack");
-    const myStackRef = doc(myStackCollection, stackId);
-    const subStacksCollection = collection(myStackRef, "subStacks");
+
+  const users = collection(db, "users");
+  const userRef = doc(users, userId);
+  const myStackCollection = collection(userRef, "myStack");
+  const myStackRef = doc(myStackCollection, stackId);
+  const subStacksCollection = collection(myStackRef, "subStacks");
 
 
-    try {
-      const subStackRef = await addDoc(subStacksCollection, {
-        stack: { ...subStack, id: '' },  // Temporary placeholder for ID
-        timestamp: new Date(),
-      });
+  try {
+    const subStackRef = await addDoc(subStacksCollection, {
+      stack: { ...subStack, id: '' },  // Temporary placeholder for ID
+      timestamp: new Date(),
+    });
 
-      console.log("Sub-stack document written with ID: ", subStackRef.id);
+    console.log("Sub-stack document written with ID: ", subStackRef.id);
 
-      // Update the document with its own ID
-      await updateDoc(subStackRef, {
-        'stack.id': subStackRef.id,  // Update the id inside the stack object
-      });
+    // Update the document with its own ID
+    await updateDoc(subStackRef, {
+      'stack.id': subStackRef.id,  // Update the id inside the stack object
+    });
 
-      console.log("Sub-stack document updated with its own ID");
+    console.log("Sub-stack document updated with its own ID");
 
-      return subStackRef.id;
-    } catch (error) {
-      console.error("Error adding sub-stack document: ", error);
-    }
+    return subStackRef.id;
+  } catch (error) {
+    console.error("Error adding sub-stack document: ", error);
+  }
 }
 
 
 
 export const updateSubStack = async (userId, stackId, subStackId, topic, depthResponseData) => {
-  
-    const users = collection(db, "users");
-    const userRef = doc(users, userId);
-    const myStackCollection = collection(userRef, "myStack");
-    const myStackRef = doc(myStackCollection, stackId);
-    const subStacksCollection = collection(myStackRef, "subStacks");
-    const subStackRef = doc(subStacksCollection, subStackId);
 
-    try {
-      // Fetch existing document
-      const docSnapshot = await getDoc(subStackRef);
-      if (!docSnapshot.exists()) {
-        console.error('No such document exists!');
-        return;
-      }
-      let currentData = docSnapshot.data();
+  const users = collection(db, "users");
+  const userRef = doc(users, userId);
+  const myStackCollection = collection(userRef, "myStack");
+  const myStackRef = doc(myStackCollection, stackId);
+  const subStacksCollection = collection(myStackRef, "subStacks");
+  const subStackRef = doc(subStacksCollection, subStackId);
 
-      // If the topic already exists, append to it. Otherwise, create a new array
-      if (currentData.depthStack && currentData.depthStack[topic]) {
-        currentData.depthStack[topic].push(depthResponseData);
-      } else {
-        currentData.depthStack = { ...currentData.depthStack, [topic]: [depthResponseData] };
-      }
-
-      // Update the document with the new data
-      await updateDoc(subStackRef, currentData);
-
-      console.log("Sub-stack document updated with ID: ", subStackRef.id);
-    } catch (error) {
-      console.error("Error updating sub-stack document: ", error);
+  try {
+    // Fetch existing document
+    const docSnapshot = await getDoc(subStackRef);
+    if (!docSnapshot.exists()) {
+      console.error('No such document exists!');
+      return;
     }
-}
+    let currentData = docSnapshot.data();
 
-
-export const fetchStacks = async () => {
-  // Check if user is signed in
-  if (auth.currentUser) {
-    const userId = auth.currentUser.uid;
-    const users = collection(db, "users");
-    const userRef = doc(users, userId);
-    const myStack = collection(userRef, "myStack");
-
-    try {
-      const snapshot = await getDocs(query(myStack, orderBy('timestamp')));
-      const stacks = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-
-      return stacks;
-    } catch (error) {
-      console.error("Error fetching stacks: ", error);
+    // If the topic already exists, append to it. Otherwise, create a new array
+    if (currentData.depthStack && currentData.depthStack[topic]) {
+      currentData.depthStack[topic].push(depthResponseData);
+    } else {
+      currentData.depthStack = { ...currentData.depthStack, [topic]: [depthResponseData] };
     }
-  } else {
-    console.log("No user is signed in.");
+
+    // Update the document with the new data
+    await updateDoc(subStackRef, currentData);
+
+    console.log("Sub-stack document updated with ID: ", subStackRef.id);
+  } catch (error) {
+    console.error("Error updating sub-stack document: ", error);
   }
 }
 
 
-export const fetchSubStacks = async (stackId) => {
-  // Check if user is signed in
-  if (auth.currentUser) {
-    const userId = auth.currentUser.uid;
-    const users = collection(db, "users");
-    const userRef = doc(users, userId);
-    const myStackCollection = collection(userRef, "myStack");
-    const myStackRef = doc(myStackCollection, stackId);
-    const subStacksCollection = collection(myStackRef, "subStacks");
+export const fetchStacks = async (userId) => {
+  const users = collection(db, "users");
+  const userRef = doc(users, userId);
+  const myStack = collection(userRef, "myStack");
 
-    try {
-      const snapshot = await getDocs(query(subStacksCollection, orderBy('timestamp')));
-      const subStacks = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+  try {
+    const snapshot = await getDocs(query(myStack, orderBy('timestamp')));
+    const stacks = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
 
-      return subStacks;
-    } catch (error) {
-      console.error("Error fetching sub-stacks: ", error);
-    }
-  } else {
-    console.log("No user is signed in.");
+    return stacks;
+  } catch (error) {
+    console.error("Error fetching stacks: ", error);
+  }
+}
+
+
+export const fetchSubStacks = async (userId, stackId) => {
+  const users = collection(db, "users");
+  const userRef = doc(users, userId);
+  const myStackCollection = collection(userRef, "myStack");
+  const myStackRef = doc(myStackCollection, stackId);
+  const subStacksCollection = collection(myStackRef, "subStacks");
+
+  try {
+    const snapshot = await getDocs(query(subStacksCollection, orderBy('timestamp')));
+    const subStacks = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    return subStacks;
+  } catch (error) {
+    console.error("Error fetching sub-stacks: ", error);
   }
 }
 
@@ -192,7 +180,7 @@ export const checkUserResponseCount = async () => {
         return;
       }
       let currentData = docSnapshot.data();
-      return {responseCount: currentData.responseCount, subscriber: currentData.subscriber};
+      return { responseCount: currentData.responseCount, subscriber: currentData.subscriber };
     } catch (error) {
       console.error("Error fetching user response count: ", error);
     }

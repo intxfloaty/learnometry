@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '@/components/Sidebar';
-import { fetchStacks } from '@/utils/firebase';
+import { auth, fetchStacks } from '@/utils/firebase';
 import Link from 'next/link';
 import styles from '@/styles/Stacks.module.css';
 
 function Stacks() {
   const [stacks, setStacks] = useState([]);
+  const userId = auth.currentUser.uid;
+  console.log(stacks, 'stacks')
+  console.log(userId, 'userId')
+
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedStacks = await fetchStacks()
+      const fetchedStacks = await fetchStacks(userId)
       setStacks(fetchedStacks);
     }
     fetchData()
-  }, [])
+  }, [userId])
 
   return (
     <main className={styles.main}>
