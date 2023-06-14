@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Link from 'next/link';
 import styles from '../styles/Sidebar.module.css'
 import { ListItemButton, ListItemText, IconButton, Drawer, useMediaQuery, AppBar, Toolbar, Hidden } from '@mui/material';
 import LayersIcon from '@mui/icons-material/Layers';
@@ -67,23 +66,19 @@ const Sidebar = ({ subscriber, productName }) => {
           src="/images/logo.svg" className={styles.logo} />
       </div>
 
-      <Link href="/">
-        <ListItemButton >
+        <ListItemButton onClick={()=> router.push('/')}>
           <IconButton >
             <AddBoxIcon color='primary' />
           </IconButton>
           <ListItemText primary="New Stack" />
         </ListItemButton>
-      </Link>
 
-      <Link href="/stacks">
-        <ListItemButton>
+        <ListItemButton onClick={()=> router.push('/stacks')}>
           <IconButton >
             <LayersIcon color='primary' />
           </IconButton>
           <ListItemText primary="Your Stacks" />
         </ListItemButton>
-      </Link>
 
       <ListItemButton onClick={handleProgressReportModalOpen} >
         <IconButton >
