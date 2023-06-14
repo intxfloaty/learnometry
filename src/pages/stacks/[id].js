@@ -19,11 +19,9 @@ const StackPage = () => {
 
   useEffect(() => {
     if (id) { // to avoid running on initial render
-      const fetchData = async () => {
-        const fetchedStack = await fetchSubStacks(userId, id)
+      fetchSubStacks(userId, id).then((fetchedStack) => {
         setStack(fetchedStack);
-      }
-      fetchData()
+      });
     }
   }, [userId, id]);
 

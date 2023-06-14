@@ -12,11 +12,9 @@ function Stacks() {
 
 
   useEffect(() => {
-    const fetchData = async () => {
-      const fetchedStacks = await fetchStacks(userId)
+    fetchStacks(userId).then((fetchedStacks) => {
       setStacks(fetchedStacks);
-    }
-    fetchData()
+    });
   }, [userId])
 
   return (
@@ -26,7 +24,7 @@ function Stacks() {
       </div>
       <div className={styles.stacksContainer}>
         <h1 className={styles.stacksTitle}>Your Stacks</h1>
-        {stacks.map((stack, index) => (
+        {stacks && stacks?.map((stack, index) => (
           <Link href={`/stacks/${stack.id}`} passHref key={index}>
             <div className={styles.stack}>
               <span className={styles.stackName}>
