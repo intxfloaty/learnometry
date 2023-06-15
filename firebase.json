@@ -12,8 +12,16 @@
     ],
     "rewrites": [
       {
-        "source": "**",
+        "source": "/",
         "destination": "/index.html"
+      },
+      {
+        "source": "/stacks",
+        "destination": "/stacks.html"
+      },
+      {
+        "source": "/stacks/:id",
+        "destination": "/stacks/[id].html"
       }
     ]
   },
