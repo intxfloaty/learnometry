@@ -15,8 +15,10 @@ import {
   useMediaQuery
 } from '@mui/material';
 import { auth } from '@/utils/firebase';
+import { useSubscription } from '@/context/subscriptionContext';
 
-const MyPlanModal = ({ open, handleClose, modalMessage, subscriber, productName }) => {
+const MyPlanModal = ({ open, handleClose, modalMessage }) => {
+  const { subscriber, productName } = useSubscription();
   const [userId, setUserId] = useState('');
   console.log(subscriber, productName, 'subscriber, productName')
   const theme = useTheme();

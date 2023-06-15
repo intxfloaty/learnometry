@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <>
       <main className={styles.main} >
-        <Sidebar subscriber={subscriber} productName={productName} />
+        <Sidebar />
         <InputPromptText
           responses={responses}
           setResponses={setResponses}

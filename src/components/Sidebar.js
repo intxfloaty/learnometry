@@ -15,7 +15,7 @@ import { auth } from '../utils/firebase';
 import { useRouter } from 'next/router';
 
 
-const Sidebar = ({ subscriber, productName }) => {
+const Sidebar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [progressReportModalOpen, setProgressReportModalOpen] = useState(false);
@@ -66,19 +66,19 @@ const Sidebar = ({ subscriber, productName }) => {
           src="/images/logo.svg" className={styles.logo} />
       </div>
 
-        <ListItemButton onClick={()=> router.push('/')}>
-          <IconButton >
-            <AddBoxIcon color='primary' />
-          </IconButton>
-          <ListItemText primary="New Stack" />
-        </ListItemButton>
+      <ListItemButton onClick={() => router.push('/')}>
+        <IconButton >
+          <AddBoxIcon color='primary' />
+        </IconButton>
+        <ListItemText primary="New Stack" />
+      </ListItemButton>
 
-        <ListItemButton onClick={()=> router.push('/stacks')}>
-          <IconButton >
-            <LayersIcon color='primary' />
-          </IconButton>
-          <ListItemText primary="Your Stacks" />
-        </ListItemButton>
+      <ListItemButton onClick={() => router.push('/stacks')}>
+        <IconButton >
+          <LayersIcon color='primary' />
+        </IconButton>
+        <ListItemText primary="Your Stacks" />
+      </ListItemButton>
 
       <ListItemButton onClick={handleProgressReportModalOpen} >
         <IconButton >
@@ -153,7 +153,7 @@ const Sidebar = ({ subscriber, productName }) => {
       >
         {drawer}
       </Drawer>
-      <MyPlanModal open={modalOpen} handleClose={handleModalClose} subscriber={subscriber} productName={productName} />
+      <MyPlanModal open={modalOpen} handleClose={handleModalClose} />
       <ComingSoonModal
         open={progressReportModalOpen}
         handleClose={handleProgressReportModalClose}

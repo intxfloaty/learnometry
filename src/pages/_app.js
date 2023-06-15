@@ -3,6 +3,7 @@ import { ThemeProvider } from '../context/themeContext';
 import useAuth from "../utils/auth/authState";
 import SignIn from './auth/SignIn';
 import Loading from '../components/Loading';
+import { SubscriptionProvider } from '@/context/subscriptionContext';
 
 function MyApp({ Component, pageProps }) {
   const { user, loading } = useAuth();
@@ -19,9 +20,11 @@ function MyApp({ Component, pageProps }) {
 
   // If a user is authenticated, proceed to the application.
   return (
-    <ThemeProvider>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <SubscriptionProvider>
+      <ThemeProvider>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </SubscriptionProvider>
   );
 }
 
