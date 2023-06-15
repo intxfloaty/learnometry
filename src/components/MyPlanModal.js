@@ -80,7 +80,7 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
     return (
       <Grid item xs={gridColumns}>
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Paper elevation={1} sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <Paper elevation={1} sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: "20px" }}>
             <Typography variant="h5" align="center" gutterBottom
               style={{
                 color: "blue",

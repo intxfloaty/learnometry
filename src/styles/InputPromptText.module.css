@@ -4,12 +4,6 @@
   height: 100%;
 }
 
-
-
-/* .token {
-  margin-right: 0.5rem;
-} */
-
 .responseArea {
   position: absolute;
   left: 260px;
@@ -241,6 +235,7 @@
 
   .inputField {
     font-size: 16px;
+    background-color: #fff;
   }
 
   .learnButton {
