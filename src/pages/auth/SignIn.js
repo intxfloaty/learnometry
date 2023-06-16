@@ -130,19 +130,21 @@ const SignIn = () => {
                       required
                       sx={{ width: { xs: '100%', sm: '80%', md: '70%' } }}
                     />
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      size="large"
-                      type="submit"
-                      sx={{ width: { xs: '100%', sm: '80%', md: '70%' }, marginTop: "10px" }}
-                      style={{ backgroundColor: 'black', color: 'white' }}
-                    >
-                      Continue
-                    </Button>
+                    {!message &&
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        size="large"
+                        type="submit"
+                        sx={{ width: { xs: '100%', sm: '80%', md: '70%' }, marginTop: "10px" }}
+                        style={{ backgroundColor: 'black', color: 'white' }}
+                      >
+                        Continue
+                      </Button>
+                    }
                   </Box>
                 </form>
-                {message && <Typography align="center">{message}</Typography>}
+                {message && <Typography style={{ marginTop: "20px", color: "blue" }} align="center">{message}</Typography>}
               </Grid>
               <Grid item xs={8}>
                 <Box textAlign="center" mt={1} mb={1}>
