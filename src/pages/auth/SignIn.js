@@ -4,8 +4,10 @@ import { auth } from "../../utils/firebase";
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { Button, TextField, Typography, Container, Box, Grid } from '@mui/material';
 import { sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
+import { useRouter } from 'next/router';
 
 const SignIn = () => {
+  const router = useRouter();
   const provider = new GoogleAuthProvider();
   const [email, setEmail] = useState('');
   const [error, setError] = useState(null);
@@ -49,6 +51,7 @@ const SignIn = () => {
       signInWithEmailLink(auth, email, window.location.href)
         .then((result) => {
           // Clear email from storage.
+          router.push('/')
           window.localStorage.removeItem('emailForSignIn');
           // You can access the new user via result.user
           // Additional user info profile not available via:
