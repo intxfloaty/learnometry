@@ -170,6 +170,12 @@
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+.clickableItem:disabled {
+  background-color: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}
+
 .container {
   position: fixed;
   bottom: 0;

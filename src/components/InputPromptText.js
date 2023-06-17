@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from '../styles/InputPromptText.module.css';
 import SendIcon from '@mui/icons-material/Send';
 import Dialog from '@mui/material/Dialog';
@@ -29,6 +29,9 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
   const [stackId, setStackId] = useState();
   const [subStackId, setSubStackId] = useState();
   const router = useRouter()
+  const messagesEndRef = useRef(null);
+  const [clickedPrompts, setClickedPrompts] = useState([]);
+
 
   // console.log(stackId, 'subStackId')
 
@@ -188,6 +191,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
 
   function handlePromptClick(prompt) {
     setTokens([]);
+    setClickedPrompts((prev) => [...prev, prompt]);
     const cleanedPrompt = prompt.replace(/^\d+\.\s*/, '');
     fetchResponse(cleanedPrompt);
   }
@@ -217,6 +221,10 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
       setUid(auth.currentUser.uid);
     }
   }, [auth.currentUser]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [responses]);
 
   return (
     <div className={styles.wrapper}>
@@ -309,6 +317,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
                       key={idx}
                       className={styles.clickableItem}
                       onClick={() => handlePromptClick(prompt)}
+                      disabled={clickedPrompts.includes(prompt)}
                     >
                       {prompt}
                     </button>
@@ -317,6 +326,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
               </div>
             );
           })}
+          <div ref={messagesEndRef} />
         </div>
       }
       <div className={styles.container}>
