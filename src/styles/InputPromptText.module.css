@@ -172,7 +172,7 @@
 
 .clickableItem:disabled {
   background-color: #ccc;
-  color: #888;
+  color: blue;
   cursor: not-allowed;
 }
 

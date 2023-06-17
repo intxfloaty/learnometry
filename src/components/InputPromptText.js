@@ -31,6 +31,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
   const router = useRouter()
   const messagesEndRef = useRef(null);
   const [clickedPrompts, setClickedPrompts] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
 
 
   // console.log(stackId, 'subStackId')
@@ -65,12 +66,22 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
     setInputText(event.target.value);
   };
 
+
+
   const fetchResponse = async (topic, depth_level) => {
+
+    // If fetchResponse is in progress, we do not start another one
+    if (isFetching) {
+      return;
+    }
+
+    setIsFetching(true);
 
     const userStatus = await checkUserResponseCount()
 
     if (!userStatus.subscriber && userStatus.responseCount <= 0) {
       handleModalOpen()
+      setIsFetching(false);
       return
     }
 
@@ -115,11 +126,13 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
             });
             setTokens([]);
             updateSubStack(uid, stackId || id, subStackId, topic, newDepthResponseData);
+            setIsFetching(false);
           }
         };
         eventSource.onerror = function (error) {
           console.error("Error calling OpenAI API:", error);
           eventSource.close();
+          setIsFetching(false);
         };
       }
       else {
@@ -169,16 +182,19 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
               const subStackId = await saveSubStack(uid, stackId || id, responseData);
               setSubStackId(subStackId)
             }
+            setIsFetching(false);
           }
         };
         eventSource.onerror = function (error) {
           console.error("Error calling OpenAI API:", error);
           console.log(error, "error")
           eventSource.close();
+          setIsFetching(false);
         };
       }
     } catch (error) {
       console.error("Error calling OpenAI API:", error);
+      setIsFetching(false);
     }
   };
 
@@ -317,7 +333,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
                       key={idx}
                       className={styles.clickableItem}
                       onClick={() => handlePromptClick(prompt)}
-                      disabled={clickedPrompts.includes(prompt)}
+                      disabled={isFetching || clickedPrompts.includes(prompt)}
                     >
                       {prompt}
                     </button>
@@ -337,8 +353,8 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
           value={inputText}
           onChange={handleInputChange}
         />
-        <button className={styles.learnButton} onClick={handleLearnButtonClick}>
-          <SendIcon style={{ color: 'white' }} />
+        <button className={styles.learnButton} onClick={handleLearnButtonClick} disabled={isFetching}>
+          <SendIcon style={{ color: isFetching ? 'grey' : 'white' }} />
         </button>
       </div>
 
