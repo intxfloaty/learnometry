@@ -421,6 +421,10 @@ exports.webhook = onRequest((req, res) => {
           await db.collection('users').doc(userId).update({
             subscriber: true,
           });
+        } else {
+          await db.collection('users').doc(userId).update({
+            subscriber: false,
+          });
         }
         await saveWebhookData(userId, docId, subscriptionData);
       } else {
