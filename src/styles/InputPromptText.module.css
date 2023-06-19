@@ -80,30 +80,6 @@
   }
 }
 
-
-
-/* .depthLevel_1 {
-  background-color: #a8dadc;
-}
-
-.depthLevel_2 {
-  background-color: #457b9d;
-}
-
-.depthLevel_3 {
-  background-color: #1d3557;
-}
-
-.depthLevel_4 {
-  background-color: #fca311;
-}
-
-.depthLevel_5 {
-  background-color: #e63946;
-} */
-
-
-
 .powerUpContainer {
   padding: 10px;
   display: flex;
@@ -162,7 +138,6 @@
 }
 
 .clickableItem:hover {
-  background-color: rgba(0, 0, 0, 0.1);
   color: blue;
 }
 
@@ -171,8 +146,6 @@
 }
 
 .clickableItem:disabled {
-  background-color: #ccc;
-  color: blue;
   cursor: not-allowed;
 }
 
@@ -224,6 +197,11 @@
 .learnButton:active {
   background-color: #187bcd;
   transform: scale(0.95);
+}
+
+.learnButton:disabled {
+  background-color: black;
+  cursor: not-allowed;
 }
 
 /* Mobile */
