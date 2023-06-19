@@ -33,7 +33,7 @@ jobs:
 
       - name: Build
         run: yarn export
-        with:
+        env:
           apiKey: ${{ secrets.FIREBASE_API_KEY }}
           authDomain: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
           projectId: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
