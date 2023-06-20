@@ -16,10 +16,14 @@ import {
 } from '@mui/material';
 import { auth } from '@/utils/firebase';
 import { useSubscription } from '@/context/subscriptionContext';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const MyPlanModal = ({ open, handleClose, modalMessage }) => {
   const { subscriber, productName } = useSubscription();
   const [userId, setUserId] = useState('');
+  const [plusLink, setPlusLink] = useState(false)
+  const [proLink, setProLink] = useState(false)
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -38,6 +42,7 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
   }, []);
 
   const handleGetPro = async () => {
+    setProLink(true)
     try {
       const response = await fetch('https://upgradeplan-h2i33bupla-uc.a.run.app', {
         method: 'POST',
@@ -57,6 +62,7 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
   }
 
   const handleGetPlus = async () => {
+    setPlusLink(true)
     try {
       const response = await fetch('https://upgradeplan-h2i33bupla-uc.a.run.app', {
         method: 'POST',
@@ -219,8 +225,12 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
                 </Box>
                 <Box sx={{ mt: 'auto', display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <Button variant="contained" color="primary" onClick={handleGetPlus}
-                    style={{ backgroundColor: 'black', color: 'white' }}>
-                    Get Plus
+                    style={{ backgroundColor: 'black', color: 'white' }}
+                    disabled={plusLink}>
+                    {!plusLink
+                      ? "Get Plus"
+                      : <CircularProgress color="inherit" size={24} />
+                    }
                   </Button>
                 </Box>
               </Paper>
@@ -261,8 +271,12 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
                 </Box>
                 <Box sx={{ mt: 'auto', display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <Button variant="contained" color="primary" onClick={handleGetPro}
-                    style={{ backgroundColor: 'black', color: 'white' }}>
-                    Get Pro
+                    style={{ backgroundColor: 'black', color: 'white' }}
+                    disabled={proLink}>
+                    {!proLink
+                      ? "Get Pro"
+                      : <CircularProgress color="inherit" size={24} />
+                    }
                   </Button>
                 </Box>
               </Paper>
