@@ -176,7 +176,7 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
         <Dialog open={open} onClose={handleClose} fullWidth >
           <DialogTitle>
             <Typography style={{ padding: "10px", fontSize: "16px", fontWeight: "bold" }} align="center">
-              You are already a subscriber!
+              You are already a subscriber! For any queries related to payments and billing send us an email at - support@learnometry.xyz
             </Typography>
           </DialogTitle>
           {(productName === 'Plus') ? renderPlusBox() : renderProBox()}
