@@ -196,7 +196,7 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
         </Typography>}
       <DialogContent>
         <Grid container spacing={gridSpacing} justifyContent="center">
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={6}>
             <Box sx={{ height: '100%' }}>
               <Paper elevation={1} sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="h5" align="center" gutterBottom
@@ -220,6 +220,9 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
                     </ListItem>
                     <ListItem disablePadding>
                       <Typography style={listItemStyle} align="center">3. Stack history</Typography>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <Typography style={listItemStyle} align="center">4. Access to upcoming features</Typography>
                     </ListItem>
                   </List>
                 </Box>
