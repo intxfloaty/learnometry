@@ -89,11 +89,6 @@ const SignIn = () => {
 
   return (
     <div className={styles.parent}>
-      {/* <Grid item xs={12}>
-        <Box textAlign="center">
-          <img alt="Logo" src="/images/logo.svg" width={200} />
-        </Box>
-      </Grid> */}
       <Box
         width={{ xs: '100%', sm: '80%', md: '50%' }}
         height={{ xs: '100%', sm: '80%', md: 'auto' }}
@@ -151,7 +146,7 @@ const SignIn = () => {
               </Grid>
               <Grid item xs={8}>
                 <Box textAlign="center" mt={1} mb={1}>
-                  <Typography variant="caption">OR</Typography>
+                  <Typography style={{ color: "blue", fontWeight: "bold" }} variant="caption">OR</Typography>
                 </Box>
               </Grid>
               <Grid item xs={12} display="flex" justifyContent="center">

@@ -20,7 +20,6 @@ import { useSubscription } from '@/context/subscriptionContext';
 const MyPlanModal = ({ open, handleClose, modalMessage }) => {
   const { subscriber, productName } = useSubscription();
   const [userId, setUserId] = useState('');
-  console.log(subscriber, productName, 'subscriber, productName')
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));

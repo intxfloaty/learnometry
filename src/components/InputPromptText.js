@@ -19,8 +19,6 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
   const [uid, setUid] = useState('');
   const [inputText, setInputText] = useState('');
   const [tokens, setTokens] = useState([])
-
-  console.log(uid, 'uid')
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('You have exhausted your free 50 responses. Please upgrade to continue learning.')
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
@@ -32,18 +30,10 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
   const messagesEndRef = useRef(null);
   const [clickedPrompts, setClickedPrompts] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
-
-
-  // console.log(stackId, 'subStackId')
-
-  // State for the depth preference
   const [depth, setDepth] = React.useState(1);
-
   // State for learning styles
   const [learningStyle, setLearningStyle] = React.useState('socratic');
 
-  console.log(responses, 'responses')
-  console.log(depthResponse, 'depthResponse')
 
   // Close the preferences modal
   const handlePreferencesModalClose = () => {
@@ -152,7 +142,6 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
           }
           if (data.response) {
             eventSource.close();
-            console.log(data.response, "response data")
             const responseData = {
               title: topic,
               text: data.response.content, // Assuming 'content' field in 'response'
@@ -324,7 +313,7 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
                   >
                     Learning Preference
                   </button>
-                  <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Explain Like I am 5</button>
+                  {/* <button onClick={() => setResourceModalOpen(true)} className={styles.powerUpBtn}>Explain Like I am 5</button> */}
                 </div>
                 <div className={styles.promptSuggestions}>
                   <div className={styles.promptSuggestionsTitle}>Deep Dive:</div>

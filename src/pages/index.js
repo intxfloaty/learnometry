@@ -10,7 +10,6 @@ export default function Home() {
   const [depthResponse, setDepthResponse] = useState({});
   const [subscriber, setSubscriber] = useState();
   const [productName, setProductName] = useState();
-  console.log(productName, 'productName')
 
   useEffect(() => {
     checkUserResponseCount().then((userStatus) => {

@@ -7,8 +7,6 @@ import styles from '@/styles/Stacks.module.css';
 function Stacks() {
   const [stacks, setStacks] = useState([]);
   const userId = auth.currentUser.uid;
-  console.log(stacks, 'stacks')
-  console.log(userId, 'userId')
 
 
   useEffect(() => {

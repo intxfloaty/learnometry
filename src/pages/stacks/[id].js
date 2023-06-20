@@ -13,9 +13,6 @@ const StackPage = () => {
   const [stack, setStack] = useState(null);
   const [responses, setResponses] = useState([]);
   const [depthResponse, setDepthResponse] = useState({});
-  console.log(stack, 'stack')
-  console.log(responses, 'responses[id].js')
-  console.log(depthResponse, 'depthResponse[id].js')
 
   useEffect(() => {
     if (id) { // to avoid running on initial render
