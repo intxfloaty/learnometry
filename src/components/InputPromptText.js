@@ -338,9 +338,10 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
         <input
           className={styles.inputField}
           type="text"
-          placeholder="What do you want to learn?"
+          placeholder={responses.length === 0 ? "What do you want to learn?" : ""}
           value={inputText}
           onChange={handleInputChange}
+          autoFocus
         />
         <button className={styles.learnButton}
           onClick={handleLearnButtonClick}

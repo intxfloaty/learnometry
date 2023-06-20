@@ -40,9 +40,9 @@ const Sidebar = () => {
     setDrawerOpen(open);
   };
 
-  const handleProgressReportModalOpen = () => {
-    setProgressReportModalOpen(true);
-  };
+  // const handleProgressReportModalOpen = () => {
+  //   setProgressReportModalOpen(true);
+  // };
 
   const handleProgressReportModalClose = () => {
     setProgressReportModalOpen(false);
@@ -79,13 +79,13 @@ const Sidebar = () => {
         </IconButton>
         <ListItemText primary="Your Stacks" />
       </ListItemButton>
-
+{/* 
       <ListItemButton onClick={handleProgressReportModalOpen} >
         <IconButton >
           <LeaderboardIcon color='primary' />
         </IconButton>
         <ListItemText primary="Progress Report" />
-      </ListItemButton>
+      </ListItemButton> */}
 
       <ListItemButton onClick={handleModalOpen}>
         <IconButton >
