@@ -342,8 +342,11 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
           value={inputText}
           onChange={handleInputChange}
         />
-        <button className={styles.learnButton} onClick={handleLearnButtonClick} disabled={isFetching}>
-          <SendIcon style={{ color: isFetching ? 'grey' : 'white' }} />
+        <button className={styles.learnButton}
+          onClick={handleLearnButtonClick}
+          disabled={(inputText === "" ? true : false) || isFetching}
+        >
+          <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
         </button>
       </div>
 
