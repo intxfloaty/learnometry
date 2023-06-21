@@ -35,6 +35,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
   // State for learning styles
   const [learningStyle, setLearningStyle] = React.useState('socratic');
   const topics = ['Trigonometry', 'Artificial Intelligence', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Generators', 'CUDA', 'Calculus'];
+  const mobileTopics = ['Trigonometry', 'Artificial Intelligence', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Generators', 'CUDA']
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
 
   const updateMedia = () => {
@@ -258,7 +259,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
   if (isDesktop && (!responses || responses.length === 0)) {
     return (
       <>
-        <h2 className={styles.topicHeader}>Learn about any topic!</h2>
+        <Typography variant="h5" style={{ marginBottom: "15px" }}>Learn about any topic</Typography>
         <div className={styles.topicBlocks}>
           {topics.map((topic, index) => (
             <button key={index} className={styles.topicBlock} onClick={() => handleTopicBlockClick(topic)}>
@@ -283,6 +284,39 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
           </button>
         </div>
       </>
+    );
+  }
+
+  if (!isDesktop && (!responses || responses.length === 0)) {
+    return (
+      <div className={styles.mobileWrapper}>
+        <div className={styles.responsiveTypography}>
+          <Typography variant="h5">Learn about any topic</Typography>
+        </div>
+        <div className={styles.topicBlocks}>
+          {mobileTopics.map((topic, index) => (
+            <button key={index} className={styles.topicBlock} onClick={() => handleTopicBlockClick(topic)}>
+              {topic}
+            </button>
+          ))}
+        </div>
+        <div className={styles.container}>
+          <input
+            className={styles.inputField}
+            type="text"
+            placeholder={responses.length === 0 ? "What do you want to learn?" : ""}
+            value={inputText}
+            onChange={handleInputChange}
+            autoFocus
+          />
+          <button className={styles.learnButton}
+            onClick={handleLearnButtonClick}
+            disabled={(inputText === "" ? true : false) || isFetching}
+          >
+            <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
+          </button>
+        </div>
+      </div>
     );
   }
 
@@ -358,6 +392,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
                 <div className={styles.powerUpContainer}>
                   <button
                     className={styles.powerUpBtn}
+                    disabled={isFetching}
                     onClick={() => {
                       setTopic(response.title);
                       console.log(response?.id, 'response?.id')
