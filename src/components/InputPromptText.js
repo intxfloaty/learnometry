@@ -277,6 +277,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
             <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
           </button>
         </div>
+        <MyPlanModal open={modalOpen} handleClose={handleModalClose} modalMessage={modalMessage} />
       </>
     );
   }
@@ -309,6 +310,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
             <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
           </button>
         </div>
+        <MyPlanModal open={modalOpen} handleClose={handleModalClose} modalMessage={modalMessage} />
       </div>
     );
   }
@@ -388,7 +390,6 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
                     disabled={isFetching}
                     onClick={() => {
                       setTopic(response.title);
-                      console.log(response?.id, 'response?.id')
                       if (response?.id) {
                         setSubStackId(response?.id)
                       }
