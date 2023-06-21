@@ -1,6 +1,6 @@
 .main {
     background-color: white;
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-wrap: wrap;
 }
@@ -79,7 +79,7 @@
 
     .stack {
         height: auto;
-        padding: 10px ;
+        padding: 10px;
         min-width: 200px;
     }
 }

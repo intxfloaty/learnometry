@@ -228,15 +228,10 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
 
 
   useEffect(() => {
-    if (window.performance) {
-      const navigationEntry = window.performance.getEntriesByType("navigation")[0];
-      if (navigationEntry && navigationEntry.type === 'reload') {
-        if (stackId && responses) {
-          router.push(`/stacks/${stackId}`);
-        }
-      }
+    if (stackId && responses) {
+      router.push(`/stacks/${stackId}`);
     }
-  }, [stackId, responses, router]);
+  }, [stackId, responses[0], router]);
 
   useEffect(() => {
     if (auth.currentUser) {
