@@ -31,7 +31,7 @@ export const saveStackHistory = async (userId, stack) => {
       timestamp: new Date(),
     });
 
-    console.log("Document written with ID: ", docRef.id);
+    // console.log("Document written with ID: ", docRef.id);
 
     const subStacks = collection(docRef, "subStacks");
 
@@ -41,14 +41,14 @@ export const saveStackHistory = async (userId, stack) => {
       timestamp: new Date(),
     });
 
-    console.log("Document written with ID: ", stackContentRef.id);
+    // console.log("Document written with ID: ", stackContentRef.id);
 
     // Update the 'stack' field in the document with its own ID
     await updateDoc(stackContentRef, {
       'stack.id': stackContentRef.id,  // Update the id inside the stack object
     });
 
-    console.log("Sub-stack document updated with its own ID inside the stack object");
+    // console.log("Sub-stack document updated with its own ID inside the stack object");
 
     // Return the Id's for later use
     return { stackId: docRef.id, subStackId: stackContentRef.id };
@@ -75,14 +75,14 @@ export const saveSubStack = async (userId, stackId, subStack) => {
       timestamp: new Date(),
     });
 
-    console.log("Sub-stack document written with ID: ", subStackRef.id);
+    // console.log("Sub-stack document written with ID: ", subStackRef.id);
 
     // Update the document with its own ID
     await updateDoc(subStackRef, {
       'stack.id': subStackRef.id,  // Update the id inside the stack object
     });
 
-    console.log("Sub-stack document updated with its own ID");
+    // console.log("Sub-stack document updated with its own ID");
 
     return subStackRef.id;
   } catch (error) {
@@ -120,7 +120,7 @@ export const updateSubStack = async (userId, stackId, subStackId, topic, depthRe
     // Update the document with the new data
     await updateDoc(subStackRef, currentData);
 
-    console.log("Sub-stack document updated with ID: ", subStackRef.id);
+    // console.log("Sub-stack document updated with ID: ", subStackRef.id);
   } catch (error) {
     console.error("Error updating sub-stack document: ", error);
   }
@@ -185,7 +185,7 @@ export const checkUserResponseCount = async () => {
       console.error("Error fetching user response count: ", error);
     }
   } else {
-    console.log("No user is signed in.");
+    // console.log("No user is signed in.");
   }
 }
 

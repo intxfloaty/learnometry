@@ -33,6 +33,17 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
   const [depth, setDepth] = React.useState(1);
   // State for learning styles
   const [learningStyle, setLearningStyle] = React.useState('socratic');
+  const topics = ['Trigonometry', 'Artificial Intelligence', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Generators', 'CUDA', 'Calculus'];
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
+  const updateMedia = () => {
+    setIsDesktop(window.innerWidth > 950);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  }, []);
 
 
   // Close the preferences modal
@@ -194,6 +205,10 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
     setInputText('');
   };
 
+  const handleTopicBlockClick = (topic) => {
+    fetchResponse(topic);
+  }
+
   function handlePromptClick(prompt) {
     setTokens([]);
     setClickedPrompts((prev) => [...prev, prompt]);
@@ -230,6 +245,40 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [responses]);
+
+
+  // Render topics when response array is empty
+  if (isDesktop && (!responses || responses.length === 0)) {
+    return (
+      <>
+        <h2 className={styles.topicHeader}>Learn about any topic!</h2>
+        <div className={styles.topicBlocks}>
+          {topics.map((topic, index) => (
+            <button key={index} className={styles.topicBlock} onClick={() => handleTopicBlockClick(topic)}>
+              {topic}
+            </button>
+          ))}
+        </div>
+        <div className={styles.container}>
+          <input
+            className={styles.inputField}
+            type="text"
+            placeholder={responses.length === 0 ? "What do you want to learn?" : ""}
+            value={inputText}
+            onChange={handleInputChange}
+            autoFocus
+          />
+          <button className={styles.learnButton}
+            onClick={handleLearnButtonClick}
+            disabled={(inputText === "" ? true : false) || isFetching}
+          >
+            <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
+          </button>
+        </div>
+      </>
+    );
+  }
+
 
   return (
     <div className={styles.wrapper}>
