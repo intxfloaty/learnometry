@@ -13,6 +13,7 @@ const StackPage = () => {
   const [stack, setStack] = useState(null);
   const [responses, setResponses] = useState([]);
   const [depthResponse, setDepthResponse] = useState({});
+  const [isResponseLoading, setIsResponseLoading] = useState(true)
 
   useEffect(() => {
     if (id) { // to avoid running on initial render
@@ -28,6 +29,7 @@ const StackPage = () => {
         return item.stack;
       })
       setResponses(responses)
+      setIsResponseLoading(false)
     }
   }, [stack]);
 
@@ -48,6 +50,7 @@ const StackPage = () => {
         <InputPromptText
           responses={responses}
           setResponses={setResponses}
+          isResponseLoading={isResponseLoading}
           depthResponse={depthResponse}
           setDepthResponse={setDepthResponse}
           id={id}

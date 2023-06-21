@@ -13,9 +13,10 @@ import MyPlanModal from './MyPlanModal';
 import { saveStackHistory, saveSubStack, updateSubStack } from '@/utils/firebase';
 import { useRouter } from 'next/router'
 import { auth, checkUserResponseCount } from '@/utils/firebase'
+import Loading from './Loading';
 
 
-const InputPromptText = ({ responses, setResponses, depthResponse, setDepthResponse, id }) => {
+const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResponse, setDepthResponse, id }) => {
   const [uid, setUid] = useState('');
   const [inputText, setInputText] = useState('');
   const [tokens, setTokens] = useState([])
@@ -246,6 +247,12 @@ const InputPromptText = ({ responses, setResponses, depthResponse, setDepthRespo
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [responses]);
 
+
+  if (isResponseLoading) {
+    return (
+      <Loading />
+    )
+  }
 
   // Render topics when response array is empty
   if (isDesktop && (!responses || responses.length === 0)) {
