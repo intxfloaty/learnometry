@@ -95,7 +95,7 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
               Plus
             </Typography>
             <Typography variant="h6" style={{ fontWeight: "bold" }} gutterBottom>
-              $10/month
+              $20/month
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <List>
@@ -139,7 +139,7 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
               Pro
             </Typography>
             <Typography variant="h6" style={{ fontWeight: "bold" }} gutterBottom>
-              $20/month
+              $50/month
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <List>
@@ -211,7 +211,7 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
                   Plus
                 </Typography>
                 <Typography variant="h6" style={{ fontWeight: "bold" }} gutterBottom>
-                  $10/month
+                  $20/month
                 </Typography>
                 <Box sx={{ flexGrow: 1 }}>
                   <List>

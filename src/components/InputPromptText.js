@@ -33,7 +33,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
   const [isFetching, setIsFetching] = useState(false);
   const [depth, setDepth] = React.useState(1);
   // State for learning styles
-  const [learningStyle, setLearningStyle] = React.useState('socratic');
+  const [learningStyle, setLearningStyle] = React.useState('Textbook');
   const topics = ['Trigonometry', 'Artificial Intelligence', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Generators', 'CUDA', 'Calculus'];
   const mobileTopics = ['Trigonometry', 'Artificial Intelligence', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Generators', 'CUDA']
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);

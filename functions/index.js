@@ -39,16 +39,19 @@ exports.createUserRecord = functions.auth.user().onCreate((user) => {
 
 const chat = new ChatOpenAI({
   openAIApiKey: `${process.env.OPENAI_API_KEY}`,
+  modelName: "gpt-3.5-turbo-0613",
   temperature: 1,
   streaming: true,
 });
 
 const learningPrompt = ChatPromptTemplate.fromPromptMessages([
   SystemMessagePromptTemplate.fromTemplate(
-    `You are a helpful tutor that helps students learn about any topic.
-      Given a topic, it is your job to generate content for that topic which will help students learn deeply.
-      Topic: {topic}
-        content:`
+    `You are a knowledgeable and engaging tutor, skilled in making any topic interesting and stimulating.
+    Your mission is to create comprehensive and captivating content on the given topic, incorporating key facts, 
+    interesting anecdotes, analogies, examples, and interactive elements that will help students delve deeper 
+    into the subject. Also, encourage critical thinking by posing thought-provoking questions related to the topic. 
+    Topic: {topic}
+      content:`
   ),
   HumanMessagePromptTemplate.fromTemplate("{topic}"),
 ]);
@@ -68,7 +71,7 @@ const questionLLM = new OpenAI({
 
 const questionTemplate = `You are a helpful prompt generator that generates question prompts .
   Given the content for a topic, it is your job to generate question prompts.
-  Asks thought-provoking questions to stimulate intellectual curiosity, critical thinking, and self-directed learning.
+  Generate thought-provoking questions to stimulate intellectual curiosity, critical thinking, and self-directed learning.
   content : {content}`
 
 const questionPromptTemplate = new PromptTemplate({
@@ -84,73 +87,69 @@ const questionChain = new LLMChain({
 
 const depthLevelLLM = new ChatOpenAI({
   openAIApiKey: `${process.env.OPENAI_API_KEY}`,
-  temperature: 0.5,
+  modelName: "gpt-3.5-turbo-0613",
+  temperature: 1,
   streaming: true,
 });
 
 const depthLevelTemplate = (depth_level, learningStyle) => {
-  let content = `You are a helpful tutor that helps students learn about any topic.
-    Given a {topic}, {depth_level} and {learningStyle}, it is your job to generate content for that topic according to the specified depth_level and learning style.`
+  let content = `You are a knowledgeable and engaging tutor, skilled in making any topic interesting and stimulating.
+  Given a topic, depth_level and learningStyle, your mission is to create comprehensive, captivating, and interactive content that will help students gain a deeper and richer understanding of the topic.
+  Topic: {topic}
+  depth_level : {depth_level}
+  learningStyle: {learningStyle}`
   switch (depth_level) {
     case 'Level_1':
-      // Define Level_1 content
-      content += `Imagine you have just heard about {topic} for the first time. 
-        Provide a simple and brief explanation that covers the fundamental aspects. 
-        Aim for a level of understanding appropriate for someone with no prior knowledge of the subject.`;
+      content += `Imagine you are introducing {topic} to a curious learner for the first time. 
+      Provide a simple and engaging explanation that covers the fundamental aspects. 
+      Aim for a level of understanding appropriate for someone with no prior knowledge of the subject.`;
       break;
     case 'Level_2':
-      // Define Level_2 content
-      content += `Now that you have the basics of {topic}, dive deeper. 
-        Explore and elaborate on the foundational principles, introduce related concepts, and describe how these ideas interconnect to form a broader understanding of the topic`;
+      content += `Assuming a learner knows nothing more than the basics of {topic}, dive deeper. 
+      Explore and elaborate on the foundational principles, introduce related concepts, and describe how these ideas interconnect, without reliance on information beyond a basic understanding.`;
       break;
     case 'Level_3':
-      // Define Level_3 content
-      content += `Let's delve further into {topic}. 
-        Provide a comprehensive and detailed explanation. 
-        Discuss the components, interrelationships, and relevant theories. 
-        Use examples and give context where necessary to provide a full picture.`;
+      content += `Providing a stand-alone comprehensive exploration into {topic}, offer a detailed explanation. 
+      Discuss the components, interrelationships, and relevant theories. Use examples and contexts to provide a complete picture. 
+      How about presenting a challenge or a critical thinking task to inspire further learning?`;
       break;
     case 'Level_4':
-      // Define Level_4 content
-      content += `With a solid understanding of {topic}, it's time to apply what you've learned. 
-        Discuss real-world applications and case studies related to the topic. 
-        Highlight problem-solving techniques that could be used in these situations`;
+      content += `Now, let's consider {topic} in a practical context. Your learner has a general understanding of the topic, but needs to see its real-world relevance. 
+      Share the ways this topic is applied in real-world situations and present case studies that highlight its importance. 
+      Explain problem-solving techniques related to the topic and pose a scenario where the learner can apply these techniques. 
+      Keep in mind that the learner has a foundational understanding, but might not be familiar with more advanced or detailed aspects of the topic.`;
       break;
     case 'Level_5':
-      // Define Level_5 content
-      content += `At this depth level, you're ready to tackle the most advanced aspects of {topic}. 
-        Introduce cutting-edge techniques, innovations, and recent research. 
-        Discuss the potential future developments and implications of these advanced concepts.`;
+      content += `Now, let's push the boundaries of {topic}. At this level, you're introducing learners to the cutting-edge and advanced aspects of the subject. 
+      Discuss the latest techniques, groundbreaking innovations, and recent research related to the topic. 
+      Explore potential future developments and their implications.
+      Perhaps you could propose a thought-provoking question or a research problem that will inspire learners to investigate these advanced concepts further.`;
       break;
   }
 
   switch (learningStyle) {
-    case 'textbook':
-      // Define textbook learning style
-      content += `"Explain {topic} as if you're writing a chapter in a textbook. 
-        Use well-structured sentences, a rich vocabulary, and maintain an academic tone. 
-        Ensure the content is organized logically and cohesively.`;
+    case 'Textbook':
+      content += `Imagine you're writing a chapter in a textbook about {topic}. 
+      Maintain an academic tone. Structure the content logically and cohesively, and propose review questions at the end of each section.`;
       break;
-    case 'layman':
-      // Define layman learning style
-      content += `Simplify {topic} for someone without any background in the subject. 
-        Use everyday language, clear explanations, and relatable examples to make the topic easily understandable.`;
+    case 'Layman':
+      content += `Explain {topic} in everyday language, using clear explanations and relatable examples. 
+      Make the content engaging by using a friendly and conversational tone. Can you provide a metaphor or a real-life example that makes the topic easily understandable?`;
       break;
-    case 'storyTelling':
-      // Define storyTelling learning style
-      content += `Narrate a story revolving around {topic}. 
-        Use characters, plot, and setting to bring the topic to life. 
-        The narrative should be engaging, memorable, and effectively convey the essential aspects of the topic.`;
-      break;
-    case 'socratic':
-      // Define socratic learning style
+    case 'Socratic':
       content += `Approach the explanation of {topic} through a series of thought-provoking questions. 
-        Encourage self-directed learning and stimulate curiosity about the subject`;
+      Encourage self-directed learning and stimulate curiosity. What questions could lead to intriguing discussions or stimulate further research on the topic?`;
       break;
-    case 'analogical':
-      // Define analogical learning style
+    case 'Analogical':
       content += `Use analogies to explain {topic}. 
-        Identify concepts that are similar to the topic and use these comparisons to foster a deeper understanding of the subject.`;
+      Identify concepts that are similar to the topic and use these comparisons to foster a deeper understanding. 
+      Provide a vivid or surprising analogy that will make the learning experience more memorable`;
+      break;
+    case 'ELI5':
+      content += `Imagine explaining {topic} to a 5-year-old. 
+        Use simple language, relatable examples, and metaphors that a child could understand. 
+        The key here is to break down the concept and make it as clear and entertaining as possible. 
+        Can you think of a way to relate the topic to something a 5-year-old might encounter in their daily life or in their favorite stories or games?`;
       break;
   }
   return content;
