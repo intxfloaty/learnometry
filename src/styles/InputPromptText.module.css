@@ -107,7 +107,6 @@
 }
 
 .powerUpBtn:active {
-  background-color: #187bcd;
   transform: scale(0.95);
 }
 

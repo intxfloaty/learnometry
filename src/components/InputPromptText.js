@@ -274,7 +274,6 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
             placeholder={responses.length === 0 ? "What do you want to learn?" : ""}
             value={inputText}
             onChange={handleInputChange}
-            autoFocus
           />
           <button className={styles.learnButton}
             onClick={handleLearnButtonClick}
@@ -307,7 +306,6 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
             placeholder={responses.length === 0 ? "What do you want to learn?" : ""}
             value={inputText}
             onChange={handleInputChange}
-            autoFocus
           />
           <button className={styles.learnButton}
             onClick={handleLearnButtonClick}
@@ -432,7 +430,6 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
           placeholder={responses.length === 0 ? "What do you want to learn?" : ""}
           value={inputText}
           onChange={handleInputChange}
-          autoFocus
         />
         <button className={styles.learnButton}
           onClick={handleLearnButtonClick}
