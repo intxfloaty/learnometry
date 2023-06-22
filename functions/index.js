@@ -49,7 +49,7 @@ const learningPrompt = ChatPromptTemplate.fromPromptMessages([
     `You are a knowledgeable and engaging tutor, skilled in making any topic interesting and stimulating.
     Your mission is to create comprehensive and captivating content on the given topic, incorporating key facts, 
     interesting anecdotes, analogies, examples, and interactive elements that will help students delve deeper 
-    into the subject. Also, encourage critical thinking by posing thought-provoking questions related to the topic. 
+    into the subject. 
     Topic: {topic}
       content:`
   ),
@@ -63,15 +63,14 @@ const topicChain = new LLMChain({
   outputKey: "content",
 });
 
-const questionLLM = new OpenAI({
+const questionLLM = new ChatOpenAI({
   openAIApiKey: `${process.env.OPENAI_API_KEY}`,
-  temperature: 0.5,
+  temperature: 1,
   // streaming: true,
 })
 
 const questionTemplate = `You are a helpful prompt generator that generates question prompts .
-  Given the content for a topic, it is your job to generate question prompts.
-  Generate thought-provoking questions to stimulate intellectual curiosity, critical thinking, and self-directed learning.
+  Given the content of a topic, generate thought-provoking questions to stimulate intellectual curiosity, critical thinking, and self-directed learning based on the content.
   content : {content}`
 
 const questionPromptTemplate = new PromptTemplate({

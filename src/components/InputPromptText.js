@@ -323,7 +323,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
         <div className={styles.responseArea}>
           {responses?.map((response, index) => {
             const textLines = response?.text?.split(/\r?\n/);
-            const promptList = response?.prompts?.split(/\r?\n/).slice(3);
+            const promptList = response?.prompts?.split(/\r?\n{1,}/)
             return (
               <div key={index} className={styles.response}>
                 <div className={styles.responseTitle}>{response.title}</div>
