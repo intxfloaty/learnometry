@@ -14,6 +14,7 @@ import { saveStackHistory, saveSubStack, updateSubStack } from '@/utils/firebase
 import { useRouter } from 'next/router'
 import { auth, checkUserResponseCount } from '@/utils/firebase'
 import Loading from './Loading';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResponse, setDepthResponse, id }) => {
@@ -339,11 +340,21 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
                   ))}
                 </div>
 
+                {!response?.text
+                  && (!tokens || tokens?.length === 0)
+                  &&
+                  <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+                    <CircularProgress color="inherit" size={24} />
+                  </div>}
+
                 {!response?.text &&
                   tokens.map((token, index) => {
-                    if (token.endsWith('.\n\n') || token.endsWith(':\n\n')) {
+                    if (token.endsWith('.\n\n') || token.endsWith(':\n\n') || token.endsWith('\n\n')) {
                       return <span key={index} className={styles.token}>{token.slice(0, -2)}<br /><br /></span>
-                    } else {
+                    } else if(token.endsWith('\n') ) {
+                      return <span key={index} className={styles.token}>{token.slice(0, -1)}<br /></span>
+                    }
+                    else {
                       return (<span key={index} className={styles.token}>{token}</span>)
                     }
                   })}
