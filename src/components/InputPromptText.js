@@ -15,14 +15,16 @@ import { useRouter } from 'next/router'
 import { auth, checkUserResponseCount } from '@/utils/firebase'
 import Loading from './Loading';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useSubscription } from '@/context/subscriptionContext';
 
 
 const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResponse, setDepthResponse, id }) => {
   const [uid, setUid] = useState('');
+  const { subscriber, productName } = useSubscription();
   const [inputText, setInputText] = useState('');
   const [tokens, setTokens] = useState([])
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState('You have exhausted your free 50 responses. Please upgrade to continue learning.')
+  const [modalMessage, setModalMessage] = useState('You have exhausted your free 25 responses. Please upgrade to continue learning.')
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [resourceModalOpen, setResourceModalOpen] = useState(false);
   const [topic, setTopic] = React.useState('');
@@ -38,6 +40,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
   const topics = ['Trigonometry', 'Artificial Intelligence', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Generators', 'CUDA', 'Calculus'];
   const mobileTopics = ['Trigonometry', 'Artificial Intelligence', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Generators', 'CUDA']
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+  const [responseCount, setResponseCount] = useState()
 
   const updateMedia = () => {
     setIsDesktop(window.innerWidth > 950);
@@ -70,6 +73,14 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
     setInputText(event.target.value);
   };
 
+  useEffect(() => {
+    if (!subscriber) {
+      checkUserResponseCount().then((userStatus) => {
+        setResponseCount(userStatus.responseCount);
+      });
+    }
+
+  }, [responses, depthResponse])
 
 
   const fetchResponse = async (topic, depth_level) => {
@@ -81,13 +92,17 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
 
     setIsFetching(true);
 
-    const userStatus = await checkUserResponseCount()
+    if (!subscriber) {
+      const userStatus = await checkUserResponseCount()
 
-    if (!userStatus.subscriber && userStatus.responseCount <= 0) {
-      handleModalOpen()
-      setIsFetching(false);
-      return
+      if (!userStatus.subscriber && userStatus.responseCount <= 0) {
+        handleModalOpen()
+        setIsFetching(false);
+        return
+      }
     }
+
+
 
     try {
       if (topic && depth_level && learningStyle) {
@@ -277,6 +292,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
           >
             <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
           </button>
+          {!subscriber && <Typography style={{ marginLeft: "10px" }} >{responseCount}</Typography>}
         </div>
         <MyPlanModal open={modalOpen} handleClose={handleModalClose} modalMessage={modalMessage} />
       </>
@@ -310,6 +326,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
           >
             <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
           </button>
+          {!subscriber && <Typography style={{ marginLeft: "10px" }} >{responseCount}</Typography>}
         </div>
         <MyPlanModal open={modalOpen} handleClose={handleModalClose} modalMessage={modalMessage} />
       </div>
@@ -343,7 +360,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
                 {!response?.text
                   && (!tokens || tokens?.length === 0)
                   &&
-                  <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <CircularProgress color="inherit" size={24} />
                   </div>}
 
@@ -351,7 +368,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
                   tokens.map((token, index) => {
                     if (token.endsWith('.\n\n') || token.endsWith(':\n\n') || token.endsWith('\n\n')) {
                       return <span key={index} className={styles.token}>{token.slice(0, -2)}<br /><br /></span>
-                    } else if(token.endsWith('\n') ) {
+                    } else if (token.endsWith('\n')) {
                       return <span key={index} className={styles.token}>{token.slice(0, -1)}<br /></span>
                     }
                     else {
@@ -444,6 +461,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
         >
           <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
         </button>
+        {!subscriber && <Typography style={{ marginLeft: "10px" }} >{responseCount}</Typography>}
       </div>
 
 

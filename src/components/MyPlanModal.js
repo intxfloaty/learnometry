@@ -195,7 +195,7 @@ const MyPlanModal = ({ open, handleClose, modalMessage }) => {
           {modalMessage}
         </Typography> :
         <Typography style={{ padding: "10px", fontSize: "16px", fontWeight: "bold" }}>
-          Currently, you are on the Learnometry Free plan. Upgrade your plan to enjoy unlimited daily responses and gain access to additional features.
+          As part of Learnometry Free plan, you will get 25 free responses. Upgrade your plan to enjoy unlimited daily responses and gain access to additional features.
         </Typography>}
       <DialogContent>
         <Grid container spacing={gridSpacing} justifyContent="center">
