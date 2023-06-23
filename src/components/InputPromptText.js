@@ -24,7 +24,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
   const [inputText, setInputText] = useState('');
   const [tokens, setTokens] = useState([])
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState('You have exhausted your free 25 responses. Please upgrade to continue learning.')
+  const [modalMessage, setModalMessage] = useState('You have exhausted your free 20 responses. Please upgrade to continue learning.')
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [resourceModalOpen, setResourceModalOpen] = useState(false);
   const [topic, setTopic] = React.useState('');
@@ -37,8 +37,8 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
   const [depth, setDepth] = React.useState(1);
   // State for learning styles
   const [learningStyle, setLearningStyle] = React.useState('Textbook');
-  const topics = ['Trigonometry', 'Artificial Intelligence', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Generators', 'CUDA', 'Calculus'];
-  const mobileTopics = ['Trigonometry', 'Artificial Intelligence', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Generators', 'CUDA']
+  const topics = ['Solar System', 'Biotechnology', 'Quantum Mechanics', 'Indus Valley Civilization', 'AC machines', 'DC Machines', '', 'CUDA', 'Calculus'];
+  const mobileTopics = ['Solar System', 'Biotechnoloy', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Indus Valley Civilization', 'CUDA']
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
   const [responseCount, setResponseCount] = useState()
 
@@ -101,8 +101,6 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
         return
       }
     }
-
-
 
     try {
       if (topic && depth_level && learningStyle) {

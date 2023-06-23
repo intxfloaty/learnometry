@@ -23,7 +23,7 @@ exports.createUserRecord = functions.auth.user().onCreate((user) => {
   return docRef.set({
     email: user.email,
     uid: user.uid,
-    responseCount: 25, // assuming the user has 25 responses initially
+    responseCount: 20, // assuming the user has 25 responses initially
     subscriber: false, // assuming the user is not a subscriber initially
     timestamp: new Date(),
   })
