@@ -37,7 +37,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
   const [depth, setDepth] = React.useState(1);
   // State for learning styles
   const [learningStyle, setLearningStyle] = React.useState('Textbook');
-  const topics = ['Solar System', 'Biotechnology', 'Quantum Mechanics', 'Indus Valley Civilization', 'AC machines', 'DC Machines', '', 'CUDA', 'Calculus'];
+  const topics = ['Solar System', 'Biotechnology', 'Quantum Mechanics', 'Indus Valley Civilization', 'AC machines', 'DC Machines', 'Laws of Motion', 'CUDA', 'Calculus'];
   const mobileTopics = ['Solar System', 'Biotechnoloy', 'Quantum Mechanics', 'Robotics', 'AC machines', 'DC Machines', 'Indus Valley Civilization', 'CUDA']
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
   const [responseCount, setResponseCount] = useState()
