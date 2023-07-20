@@ -87,12 +87,12 @@ const Sidebar = () => {
         <ListItemText primary="Progress Report" />
       </ListItemButton> */}
 
-      <ListItemButton onClick={handleModalOpen}>
+      {/* <ListItemButton onClick={handleModalOpen}>
         <IconButton >
           <PersonIcon color='primary' />
         </IconButton>
         <ListItemText primary="My Plan" />
-      </ListItemButton>
+      </ListItemButton> */}
 
 
       <a

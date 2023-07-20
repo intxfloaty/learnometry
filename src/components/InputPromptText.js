@@ -73,14 +73,14 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
     setInputText(event.target.value);
   };
 
-  useEffect(() => {
-    if (!subscriber) {
-      checkUserResponseCount().then((userStatus) => {
-        setResponseCount(userStatus.responseCount);
-      });
-    }
+  // useEffect(() => {
+  //   if (!subscriber) {
+  //     checkUserResponseCount().then((userStatus) => {
+  //       setResponseCount(userStatus.responseCount);
+  //     });
+  //   }
 
-  }, [responses, depthResponse])
+  // }, [responses, depthResponse])
 
 
   const fetchResponse = async (topic, depth_level) => {
@@ -92,15 +92,15 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
 
     setIsFetching(true);
 
-    if (!subscriber) {
-      const userStatus = await checkUserResponseCount()
+    // if (!subscriber) {
+    //   const userStatus = await checkUserResponseCount()
 
-      if (!userStatus.subscriber && userStatus.responseCount <= 0) {
-        handleModalOpen()
-        setIsFetching(false);
-        return
-      }
-    }
+    //   if (!userStatus.subscriber && userStatus.responseCount <= 0) {
+    //     handleModalOpen()
+    //     setIsFetching(false);
+    //     return
+    //   }
+    // }
 
     try {
       if (topic && depth_level && learningStyle) {
@@ -117,7 +117,9 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
             : [depthResponseData],
         }));
 
-        const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}&uid=${encodeURIComponent(uid)}`;
+        // const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}&uid=${encodeURIComponent(uid)}`;
+        const url = `/api/learningContent?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}`;
+
         const eventSource = new EventSource(url);
 
         eventSource.onmessage = function (event) {
@@ -159,7 +161,8 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
           prompts: "",
         }
         setResponses((prevResponses) => [...prevResponses, responseData]);
-        const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&uid=${encodeURIComponent(uid)}`;
+        // const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&uid=${encodeURIComponent(uid)}`;
+        const url = `/api/learningContent?topic=${encodeURIComponent(topic)}`;
         const eventSource = new EventSource(url);
         eventSource.onmessage = async function (event) {
           const data = JSON.parse(event.data);
@@ -290,7 +293,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
           >
             <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
           </button>
-          {!subscriber && <Typography style={{ marginLeft: "10px" }} >{responseCount}</Typography>}
+          {/* {!subscriber && <Typography style={{ marginLeft: "10px" }} >{responseCount}</Typography>} */}
         </div>
         <MyPlanModal open={modalOpen} handleClose={handleModalClose} modalMessage={modalMessage} />
       </>
@@ -324,7 +327,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
           >
             <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
           </button>
-          {!subscriber && <Typography style={{ marginLeft: "10px" }} >{responseCount}</Typography>}
+          {/* {!subscriber && <Typography style={{ marginLeft: "10px" }} >{responseCount}</Typography>} */}
         </div>
         <MyPlanModal open={modalOpen} handleClose={handleModalClose} modalMessage={modalMessage} />
       </div>
@@ -459,7 +462,7 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
         >
           <SendIcon style={{ color: isFetching || inputText === "" ? 'grey' : 'white' }} />
         </button>
-        {!subscriber && <Typography style={{ marginLeft: "10px" }} >{responseCount}</Typography>}
+        {/* {!subscriber && <Typography style={{ marginLeft: "10px" }} >{responseCount}</Typography>} */}
       </div>
 
 

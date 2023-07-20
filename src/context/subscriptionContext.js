@@ -13,9 +13,9 @@ export const SubscriptionProvider = ({ children }) => {
     const [productName, setProductName] = useState();
 
     useEffect(() => {
-        checkUserResponseCount().then((userStatus) => {
-            setSubscriber(userStatus.subscriber);
-        });
+        // checkUserResponseCount().then((userStatus) => {
+        //     setSubscriber(userStatus.subscriber);
+        // });
 
         fetchProductName().then((productName) => {
             setProductName(productName);
