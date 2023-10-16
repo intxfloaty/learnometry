@@ -117,8 +117,8 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
             : [depthResponseData],
         }));
 
-        // const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}&uid=${encodeURIComponent(uid)}`;
-        const url = `/api/learningContent?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}`;
+        const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}&uid=${encodeURIComponent(uid)}`;
+        // const url = `/api/learningContent?topic=${encodeURIComponent(topic)}&depth_level=${encodeURIComponent(depth_level)}&learningStyle=${encodeURIComponent(learningStyle)}`;
 
         const eventSource = new EventSource(url);
 
@@ -161,8 +161,8 @@ const InputPromptText = ({ responses, setResponses, isResponseLoading, depthResp
           prompts: "",
         }
         setResponses((prevResponses) => [...prevResponses, responseData]);
-        // const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&uid=${encodeURIComponent(uid)}`;
-        const url = `/api/learningContent?topic=${encodeURIComponent(topic)}`;
+        const url = ` https://learningcontent-h2i33bupla-uc.a.run.app?topic=${encodeURIComponent(topic)}&uid=${encodeURIComponent(uid)}`;
+        // const url = `/api/learningContent?topic=${encodeURIComponent(topic)}`;
         const eventSource = new EventSource(url);
         eventSource.onmessage = async function (event) {
           const data = JSON.parse(event.data);
